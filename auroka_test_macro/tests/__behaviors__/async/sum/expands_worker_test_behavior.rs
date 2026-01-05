@@ -33,7 +33,7 @@ async fn my_async_test_inner() {
     &mut context,
     r#"
 fn my_async_test() {
-    tokio::runtime::Builder::new_multi_thread()
+    tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
         .unwrap()

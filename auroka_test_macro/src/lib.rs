@@ -33,7 +33,7 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
       #[cfg(not(target_arch = "wasm32"))]
       #[test]
       #fn_vis fn #fn_name() #fn_ret {
-          tokio::runtime::Builder::new_multi_thread()
+          tokio::runtime::Builder::new_current_thread()
               .enable_all()
               .build()
               .unwrap()
