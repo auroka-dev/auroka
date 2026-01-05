@@ -48,6 +48,28 @@ async fn test_kv_flow() {
 }
 ```
 
+### Browser Automation
+
+We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing. This allows you to control a browser (Chromium via CDP or others via WebDriver) directly from your Rust tests.
+
+The syntax is designed to be clean and idiomatic, supporting `async/await` and `Result` return types for easy error handling.
+
+```rust
+use auroka_test::auroka_test;
+use auroka_test::browser::{expect, with_page};
+
+#[auroka_test]
+async fn loads_home_in_german() -> anyhow::Result<()> {
+  with_page("/de", |page| async move {
+    expect(page.locator("footer .socials"))
+      .to_have_text("Folgen Sie uns in den sozialen Medien:")
+      .await?;
+    Ok(())
+  })
+  .await
+}
+```
+
 ## Workspace Structure
 
 The project is organized as a Cargo Workspace with the following components:
@@ -61,6 +83,7 @@ The project is organized as a Cargo Workspace with the following components:
 The testing stack is designed to be fully compatible with standard Rust tooling while enabling cross-platform execution.
 
 - **`auroka_test`**: The user-facing library. Exports the `#[auroka_test]` macro.
+- **`auroka_test_browser`**: High-level browser automation library (Playwright-like API) for E2E testing.
 - **`auroka_test_macro`**: The procedural macro that wraps tests. It generates standard `#[test]` entry points (for `cargo test`) and registers tests in a global inventory.
 - **`auroka_test_registry`**: A platform-agnostic registry that collects test definitions at runtime.
 - **`auroka_test_runner`**: The test harness library. It contains the logic to iterate over the registry and execute tests (supporting both sync and async).
@@ -95,11 +118,12 @@ The testing stack is designed to be fully compatible with standard Rust tooling 
         - [ ] Deploys the Worker to a real runtime (e.g., local `workerd` instance).
         - [ ] Tests interactions with real or emulated resources (KV, Durable Objects) via HTTP/Bindings.
     3.  **E2E Tests**:
-        - [ ] **Browser Automation** (Playwright/Selenium):
-            - [ ] Chromium (Chrome/Edge)
-            - [ ] Firefox
-            - [ ] WebKit (Safari)
-            - [ ] Mobile Emulation (Android/iOS)
+        - [x] **High-Level Browser Automation**:
+            - [x] **Chrome DevTools Protocol (CDP)**: Direct integration for high-performance testing without WebDriver overhead.
+            - [x] **Playwright-like API**: Rust-native `Page`, `Locator`, and `Expect` abstractions.
+            - [ ] **Cross-Browser Support**:
+                - [ ] Chromium (Chrome/Edge) via CDP.
+                - [ ] Firefox/WebKit (Planned).
         - [ ] Verifies the full stack from UI down to the Worker.
 
 - [ ] **Platform Support** (Target Runtimes):
