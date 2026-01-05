@@ -33,7 +33,7 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
       #[cfg(not(target_arch = "wasm32"))]
       #[test]
       #fn_vis fn #fn_name() #fn_ret {
-          tokio::runtime::Builder::new_current_thread()
+          tokio::runtime::Builder::new_multi_thread()
               .enable_all()
               .build()
               .unwrap()
@@ -57,7 +57,10 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
       auroka_test::inventory::submit! {
         auroka_test::Test {
             name: stringify!(#fn_name),
-            test_fn: || Box::pin(#inner_fn_name()),
+            test_fn: || Box::pin(async {
+                use auroka_test::TestReturn;
+                #inner_fn_name().await.into_result()
+            }),
         }
       }
     }
@@ -66,7 +69,10 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
       auroka_test::inventory::submit! {
         auroka_test::Test {
             name: stringify!(#fn_name),
-            test_fn: || Box::pin(async { #inner_fn_name() }),
+            test_fn: || Box::pin(async {
+                use auroka_test::TestReturn;
+                #inner_fn_name().into_result()
+            }),
         }
       }
     }
