@@ -12,7 +12,7 @@ pub async fn run() -> TestReport {
 
   let tests = get_tests();
   let mut passed = 0;
-  let failed = 0;
+  let mut failed = 0;
 
   println!("\nRunning auroka tests...\n");
 
@@ -21,10 +21,17 @@ pub async fn run() -> TestReport {
 
     // In the future, we will capture panics here to report failures gracefully.
     // For now, a panic will abort the test runner, which is acceptable for step 1.
-    (test.test_fn)().await;
-
-    println!("ok");
-    passed += 1;
+    match (test.test_fn)().await {
+      Ok(_) => {
+        println!("ok");
+        passed += 1;
+      }
+      Err(e) => {
+        println!("FAILED");
+        println!("Error: {:?}", e);
+        failed += 1;
+      }
+    }
   }
 
   println!(
