@@ -17,20 +17,20 @@ pub fn get_tests() -> impl Iterator<Item = &'static Test> {
 }
 
 pub trait TestReturn {
-    fn into_result(self) -> anyhow::Result<()>;
+  fn into_result(self) -> anyhow::Result<()>;
 }
 
 impl TestReturn for () {
-    fn into_result(self) -> anyhow::Result<()> {
-        Ok(())
-    }
+  fn into_result(self) -> anyhow::Result<()> {
+    Ok(())
+  }
 }
 
 impl<E> TestReturn for Result<(), E>
 where
-    E: Into<anyhow::Error>,
+  E: Into<anyhow::Error>,
 {
-    fn into_result(self) -> anyhow::Result<()> {
-        self.map_err(|e| e.into())
-    }
+  fn into_result(self) -> anyhow::Result<()> {
+    self.map_err(|e| e.into())
+  }
 }
