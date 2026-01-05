@@ -1,4 +1,5 @@
 use proc_macro::TokenStream;
+use proc_macro_crate::{FoundCrate, crate_name};
 use quote::quote;
 use syn::{ItemFn, parse_macro_input};
 
@@ -10,6 +11,29 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
   let fn_vis = &input_fn.vis;
   let fn_ret = &input_fn.sig.output;
   let is_async = input_fn.sig.asyncness.is_some();
+
+  // Resolve the correct path to auroka_test based on what the user imported
+  let crate_path = match crate_name("auroka_test") {
+    Ok(FoundCrate::Itself) => quote! { crate },
+    Ok(FoundCrate::Name(name)) => {
+      let ident = syn::Ident::new(&name, proc_macro2::Span::call_site());
+      quote! { ::#ident }
+    }
+    Err(_) => {
+      // If auroka_test is not found directly, try auroka
+      match crate_name("auroka") {
+        Ok(FoundCrate::Itself) => quote! { crate::auroka_test },
+        Ok(FoundCrate::Name(name)) => {
+          let ident = syn::Ident::new(&name, proc_macro2::Span::call_site());
+          quote! { ::#ident::auroka_test }
+        }
+        Err(_) => {
+          // Fallback to assuming auroka_test is in scope
+          quote! { ::auroka_test }
+        }
+      }
+    }
+  };
 
   // Create a unique name for the inner function containing the actual logic
   let inner_fn_name = syn::Ident::new(&format!("{}_inner", fn_name), fn_name.span());
@@ -52,17 +76,15 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
   // 3. The Registry Entry
   // We normalize everything to a Boxed Future so the runner can just `await` it.
-  // Use the macro invocation path to ensure proper hygiene
+  // Use the dynamically resolved crate path for proper hygiene
   let registry_entry = if is_async {
     quote! {
       const _: () = {
-        use auroka_test as __auroka_test_internal;
-
-        __auroka_test_internal::inventory::submit! {
-          __auroka_test_internal::Test {
+        #crate_path::inventory::submit! {
+          #crate_path::Test {
               name: stringify!(#fn_name),
               test_fn: || {
-                  use __auroka_test_internal::TestReturn;
+                  use #crate_path::TestReturn;
                   Box::pin(async move {
                       #inner_fn_name().await.into_result()
                   })
@@ -74,13 +96,11 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
   } else {
     quote! {
       const _: () = {
-        use auroka_test as __auroka_test_internal;
-
-        __auroka_test_internal::inventory::submit! {
-          __auroka_test_internal::Test {
+        #crate_path::inventory::submit! {
+          #crate_path::Test {
               name: stringify!(#fn_name),
               test_fn: || {
-                  use __auroka_test_internal::TestReturn;
+                  use #crate_path::TestReturn;
                   Box::pin(async move {
                       #inner_fn_name().into_result()
                   })
