@@ -52,29 +52,42 @@ pub fn auroka_test(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
   // 3. The Registry Entry
   // We normalize everything to a Boxed Future so the runner can just `await` it.
+  // Use the macro invocation path to ensure proper hygiene
   let registry_entry = if is_async {
     quote! {
-      auroka_test::inventory::submit! {
-        auroka_test::Test {
-            name: stringify!(#fn_name),
-            test_fn: || Box::pin(async {
-                use auroka_test::TestReturn;
-                #inner_fn_name().await.into_result()
-            }),
+      const _: () = {
+        use auroka_test as __auroka_test_internal;
+
+        __auroka_test_internal::inventory::submit! {
+          __auroka_test_internal::Test {
+              name: stringify!(#fn_name),
+              test_fn: || {
+                  use __auroka_test_internal::TestReturn;
+                  Box::pin(async move {
+                      #inner_fn_name().await.into_result()
+                  })
+              },
+          }
         }
-      }
+      };
     }
   } else {
     quote! {
-      auroka_test::inventory::submit! {
-        auroka_test::Test {
-            name: stringify!(#fn_name),
-            test_fn: || Box::pin(async {
-                use auroka_test::TestReturn;
-                #inner_fn_name().into_result()
-            }),
+      const _: () = {
+        use auroka_test as __auroka_test_internal;
+
+        __auroka_test_internal::inventory::submit! {
+          __auroka_test_internal::Test {
+              name: stringify!(#fn_name),
+              test_fn: || {
+                  use __auroka_test_internal::TestReturn;
+                  Box::pin(async move {
+                      #inner_fn_name().into_result()
+                  })
+              },
+          }
         }
-      }
+      };
     }
   };
 

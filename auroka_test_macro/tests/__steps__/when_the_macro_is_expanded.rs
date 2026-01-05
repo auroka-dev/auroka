@@ -43,9 +43,7 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
   // 2. Create the test package that uses the mock
   let mut package = Package::new("test");
 
-  let mock_path = Workspace::target_dir()
-    .join(&folder)
-    .join("auroka_test");
+  let mock_path = Workspace::target_dir().join(&folder).join("auroka_test");
 
   // We point "auroka_test" to our mock package
   package.add_dependency(Dependency::from_member(
