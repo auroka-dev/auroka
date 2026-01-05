@@ -1,0 +1,2 @@
+mod configures_compatibility_date_behavior;
+mod imports_workerd_schema_behavior;

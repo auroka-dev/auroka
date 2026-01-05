@@ -1,0 +1,4 @@
+mod defines_main_entrypoint_module_behavior;
+mod embeds_core_wasm_module_behavior;
+mod embeds_internal_wasm_modules_behavior;
+mod handles_special_charactes_in_path_behavior;

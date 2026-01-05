@@ -1,0 +1,10 @@
+package auroka-test-runner-runtime:runtime;
+
+interface test-runner {
+  run-test: func(test-name: string) -> result<_, string>;
+}
+
+world runtime {
+  // Export the interface, not the function directly
+  export test-runner;
+}

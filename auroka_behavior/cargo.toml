@@ -1,0 +1,18 @@
+[package]
+name = "auroka_behavior"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2.workspace = true
+quote.workspace = true
+syn.workspace = true
+
+[dev-dependencies]
+auroka_assertions.workspace = true
+auroka_utils.workspace = true
+auroka_utils_packages.workspace = true
+rand.workspace = true

@@ -1,0 +1,48 @@
+[workspace]
+members = [
+  "auroka",
+  "auroka_assertions",
+  "auroka_behavior",
+  "auroka_test",
+  "auroka_test_macro",
+  "auroka_test_registry",
+  "auroka_test_runner/clients/cli",
+  "auroka_test_runner/core",
+  "auroka_test_runner/runtimes/runtime",
+  "auroka_test_runner/runtimes/vms/workerd",
+  "auroka_utils",
+  "auroka_utils_filesystem",
+  "auroka_utils_packages",
+]
+
+resolver = "2"
+
+[workspace.dependencies]
+anyhow = "1.0.100"
+assert_cmd = "2.0.12"
+auroka = { path = "auroka" }
+auroka_assertions = { path = "auroka_assertions" }
+auroka_behavior = { path = "auroka_behavior" }
+auroka_test = { path = "auroka_test" }
+auroka_test_macro = { path = "auroka_test_macro" }
+auroka_test_registry = { path = "auroka_test_registry" }
+auroka_test_runner = { path = "auroka_test_runner/clients/cli" }
+auroka_test_runner_core = { path = "auroka_test_runner/core" }
+auroka_utils = { path = "auroka_utils" }
+auroka_utils_filesystem = { path = "auroka_utils_filesystem" }
+auroka_utils_packages = { path = "auroka_utils_packages" }
+clap = { version = "4.5", features = ["derive"] }
+diff = "0.1.13"
+lazy_static = "1.4.0"
+once_cell = "1.18.0"
+predicates = "3.1.3"
+proc-macro2 = "1.0"
+quote = "1.0"
+rand = "0.9.0"
+regex = "1.10.0"
+syn = { version = "2.0", features = ["full", "extra-traits"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+wit-bindgen = { version = "0.49", features = ["async-spawn"] }
+wit-deps = "0.5.0"
+workers = { path = "sdks/rust/workers" }
+workers_sim_memory = { path = "hosts/workers_sim_memory" }

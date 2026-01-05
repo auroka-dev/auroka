@@ -1,0 +1,52 @@
+use crate::__steps__::assembly::given_there_is_an_assembly_with;
+use crate::__steps__::error_code::then_failure_should_have_been_returned;
+use crate::__steps__::standard_output::then_the_standard_output_should_have;
+use crate::__steps__::auroka_test_runner::when_auroka_test_runner_is_invoked_with_the_assembly_for_test_mode_and_the_arguments;
+use crate::__steps__::Context;
+use crate::__steps__::TestMode;
+use auroka_behavior::behavior;
+
+behavior! {
+    test_mode: TestMode
+
+    given_there_is_an_assembly_with(r#"
+#[auroka_test]
+fn pass() {
+    assert_eq!(1, 1);
+}
+
+#[auroka_test]
+fn fail() {
+    assert_eq!(1, 2);
+}
+"#);
+    when_auroka_test_runner_is_invoked_with_the_assembly_for_test_mode_and_the_arguments(test_mode, "--include-ignored");
+
+    "Outputs its running 2 tests" {
+        then_the_standard_output_should_have("running 2 tests");
+    }
+
+    "Outputs the successful test summary" {
+        then_the_standard_output_should_have("test assembly::pass ... ok");
+    }
+
+    "Outputs the failed test summary" {
+        then_the_standard_output_should_have("test assembly::fail ... FAIL");
+    }
+
+    "Outputs the failed test assertion error" {
+        then_the_standard_output_should_have("assertion `left == right` failed\n  left: 1\n right: 2");
+    }
+
+    "Outputs the assembly failure summary" {
+        then_the_standard_output_should_have("failures:\n\n    assembly::fail\n");
+    }
+
+    "Outputs the assembly test summary" {
+        then_the_standard_output_should_have( "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 filtered out");
+    }
+
+    "Returns failure" {
+        then_failure_should_have_been_returned();
+    }
+}

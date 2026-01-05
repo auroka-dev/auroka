@@ -1,0 +1,11 @@
+[package]
+name = "auroka_utils_packages"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+auroka_utils.workspace = true
+auroka_utils_filesystem.workspace = true
+
+[dev-dependencies]
+rand.workspace = true

@@ -1,0 +1,11 @@
+[package]
+name = "auroka_test_runner_runtime_runtime"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+wit-bindgen.workspace = true
+
+[package.metadata.component.target]
+path = "wit"
+world = "auroka_test_runner_runtime_runtime"

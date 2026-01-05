@@ -1,0 +1,1 @@
+mod outputs_the_version_information_behavior;
