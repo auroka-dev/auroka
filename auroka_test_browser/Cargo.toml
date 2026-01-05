@@ -1,0 +1,12 @@
+[package]
+name = "auroka_test_browser"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = { workspace = true }
+chromiumoxide = { workspace = true }
+futures = { workspace = true }
+tempfile = "3.24.0"
+thirtyfour = { workspace = true }
+tokio = { workspace = true }
