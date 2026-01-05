@@ -32,15 +32,13 @@ We follow a strict "Smallest Step" TDD approach.
 
 ### The `#[auroka_test]` Macro
 
-Instead of using the standard `#[test]`, we use `#[auroka_test]`. This provides two benefits:
+Instead of using the standard `#[test]`, we use `#[auroka::test]`. This provides two benefits:
 
 1.  **Native Execution**: It generates a standard `#[test]` wrapper that runs the code natively using `tokio` and our host simulators. This is fast and works with standard IDE tools.
 2.  **WASM Registration**: It registers the test in a global inventory. This allows our custom runner to execute these tests inside WASM environments (like Cloudflare Workers or Node.js) where the standard Rust test harness does not exist.
 
 ```rust
-use auroka_test::auroka_test;
-
-#[auroka_test]
+#[auroka::test]
 async fn test_kv_flow() {
     // This runs natively via `cargo test`
     // AND can be compiled to WASM to run in `workerd`
@@ -55,10 +53,9 @@ We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing. T
 The syntax is designed to be clean and idiomatic, supporting `async/await` and `Result` return types for easy error handling.
 
 ```rust
-use auroka_test::auroka_test;
-use auroka_test::browser::{expect, with_page};
+use auroka::{expect, with_page};
 
-#[auroka_test]
+#[auroka::test]
 async fn loads_home_in_german() -> anyhow::Result<()> {
   with_page("/de", |page| async move {
     expect(page.locator("footer .socials"))
