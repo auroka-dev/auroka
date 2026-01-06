@@ -5,10 +5,11 @@ edition = "2024"
 
 [dependencies]
 anyhow = { workspace = true }
-auroka_test_browser.workspace = true
+auroka_assertions_web.workspace = true
 auroka_test_macro.workspace = true
 auroka_test_registry.workspace = true
 auroka_test_runner.workspace = true
+auroka_test_web.workspace = true
 
 [dev-dependencies]
 tokio = { workspace = true }
