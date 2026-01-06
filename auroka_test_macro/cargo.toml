@@ -6,20 +6,20 @@ edition = "2024"
 [lib]
 proc-macro = true
 
+[features]
+skip-test-attr = []
+
 [dependencies]
 proc-macro-crate = "3.4.0"
 proc-macro2.workspace = true
 quote.workspace = true
 syn.workspace = true
 
-[dev-dependencies]
-rand.workspace = true
-auroka_assertions.workspace = true
-auroka_utils.workspace = true
-auroka_utils_packages.workspace = true
-
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
 tokio.workspace = true
 
-[features]
-skip-test-attr = []
+[dev-dependencies]
+auroka_assertions.workspace = true
+auroka_utils.workspace = true
+auroka_utils_packages.workspace = true
+rand.workspace = true
