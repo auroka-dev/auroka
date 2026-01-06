@@ -80,10 +80,10 @@ The project is organized as a Cargo Workspace with the following components:
 The testing stack is designed to be fully compatible with standard Rust tooling while enabling cross-platform execution.
 
 - **`auroka_test`**: The user-facing library. Exports the `#[auroka_test]` macro.
-- **`auroka_test_browser`**: High-level browser automation library (Playwright-like API) for E2E testing.
 - **`auroka_test_macro`**: The procedural macro that wraps tests. It generates standard `#[test]` entry points (for `cargo test`) and registers tests in a global inventory.
 - **`auroka_test_registry`**: A platform-agnostic registry that collects test definitions at runtime.
 - **`auroka_test_runner`**: The test harness library. It contains the logic to iterate over the registry and execute tests (supporting both sync and async).
+- **`auroka_test_web`**: High-level browser automation library (Playwright-like API) for E2E testing.
 
 ### Utilities
 - **`auroka_utils`**: Shared utilities for file buffers, host simulation, and workspace management.
