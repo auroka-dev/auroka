@@ -141,6 +141,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "auroka_assertions_web"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "auroka_test_web",
+]
+
+[[package]]
 name = "auroka_behavior"
 version = "0.1.0"
 dependencies = [
@@ -158,22 +166,11 @@ name = "auroka_test"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "auroka_test_browser",
+ "auroka_assertions_web",
  "auroka_test_macro",
  "auroka_test_registry",
  "auroka_test_runner",
- "tokio",
-]
-
-[[package]]
-name = "auroka_test_browser"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chromiumoxide",
- "futures",
- "tempfile",
- "thirtyfour",
+ "auroka_test_web",
  "tokio",
 ]
 
@@ -235,6 +232,18 @@ dependencies = [
  "anyhow",
  "auroka_test_runner_core",
  "tempfile",
+ "tokio",
+]
+
+[[package]]
+name = "auroka_test_web"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chromiumoxide",
+ "futures",
+ "tempfile",
+ "thirtyfour",
  "tokio",
 ]
 

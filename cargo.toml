@@ -1,19 +1,20 @@
 [workspace]
 members = [
-  "auroka",
-  "auroka_assertions",
-  "auroka_behavior",
-  "auroka_test",
-  "auroka_test_browser",
-  "auroka_test_macro",
-  "auroka_test_registry",
-  "auroka_test_runner/clients/cli",
-  "auroka_test_runner/core",
-  "auroka_test_runner/runtimes/runtime",
-  "auroka_test_runner/runtimes/vms/workerd",
-  "auroka_utils",
-  "auroka_utils_filesystem",
-  "auroka_utils_packages",
+    "auroka",
+    "auroka_assertions",
+    "auroka_assertions_web",
+    "auroka_behavior",
+    "auroka_test",
+    "auroka_test_macro",
+    "auroka_test_registry",
+    "auroka_test_runner/clients/cli",
+    "auroka_test_runner/core",
+    "auroka_test_runner/runtimes/runtime",
+    "auroka_test_runner/runtimes/vms/workerd",
+    "auroka_test_web",
+    "auroka_utils",
+    "auroka_utils_filesystem",
+    "auroka_utils_packages",
 ]
 
 resolver = "2"
@@ -23,18 +24,19 @@ anyhow = "1.0.100"
 assert_cmd = "2.0.12"
 auroka = { path = "auroka" }
 auroka_assertions = { path = "auroka_assertions" }
+auroka_assertions_web = { path = "auroka_assertions_web" }
 auroka_behavior = { path = "auroka_behavior" }
 auroka_test = { path = "auroka_test" }
-auroka_test_browser = { path = "auroka_test_browser" }
 auroka_test_macro = { path = "auroka_test_macro" }
 auroka_test_registry = { path = "auroka_test_registry" }
 auroka_test_runner = { path = "auroka_test_runner/clients/cli" }
 auroka_test_runner_core = { path = "auroka_test_runner/core" }
+auroka_test_web = { path = "auroka_test_web" }
 auroka_utils = { path = "auroka_utils" }
 auroka_utils_filesystem = { path = "auroka_utils_filesystem" }
 auroka_utils_packages = { path = "auroka_utils_packages" }
-clap = { version = "4.5", features = ["derive"] }
 chromiumoxide = "0.8"
+clap = { version = "4.5", features = ["derive"] }
 diff = "0.1.13"
 futures = "0.3"
 lazy_static = "1.4.0"
