@@ -7,4 +7,4 @@ mod with_page;
 pub use expect::expect;
 pub use locator::Locator;
 pub use page::{BrowserType, Page};
-pub use with_page::with_page;
+pub use with_page::with_page_internal;
