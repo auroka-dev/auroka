@@ -50,20 +50,19 @@ async fn test_kv_flow() {
 
 We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing. This allows you to control a browser (Chromium via CDP or others via WebDriver) directly from your Rust tests.
 
-The syntax is designed to be clean and idiomatic, supporting `async/await` and `Result` return types for easy error handling.
+The syntax is designed to be clean and idiomatic, supporting `async/await` and declarative macros for concise assertions.
 
 ```rust
-use auroka::{expect, with_page};
+use auroka_test::web::{assert_has_text, with_page};
 
 #[auroka::test]
 async fn loads_home_in_german() -> anyhow::Result<()> {
-  with_page("/de", |page| async move {
-    expect(page.locator("footer .socials"))
-      .to_have_text("Folgen Sie uns in den sozialen Medien:")
-      .await?;
-    Ok(())
+  with_page!("/de", |page| {
+    assert_has_text!(
+      page.locator("footer .socials"),
+      "Folgen Sie uns in den sozialen Medien:"
+    );
   })
-  .await
 }
 ```
 
