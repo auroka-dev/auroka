@@ -1,0 +1,8 @@
+[package]
+name = "auroka_assertions_web_page"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow.workspace = true
+auroka_test_web_page.workspace = true
