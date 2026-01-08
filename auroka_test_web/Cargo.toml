@@ -5,8 +5,12 @@ edition = "2024"
 
 [dependencies]
 anyhow = { workspace = true }
-chromiumoxide = { workspace = true }
-futures = { workspace = true }
-tempfile = "3.24.0"
-thirtyfour = { workspace = true }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 tokio = { workspace = true }
+
+[dev-dependencies]
+auroka.workspace = true
+auroka_assertions_web.workspace = true
+reqwest.workspace = true
+tokio = { workspace = true, features = ["macros"] }

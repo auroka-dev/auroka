@@ -1,10 +1,4 @@
-pub mod backends;
-mod expect;
-mod locator;
-mod page;
-mod with_page;
+mod with_server;
 
-pub use expect::expect;
-pub use locator::Locator;
-pub use page::{BrowserType, Page};
-pub use with_page::with_page_internal;
+pub use with_server::with_server_internal;
+pub use with_server::{IntoMockResponse, IntoTestResult, MockResponse};
