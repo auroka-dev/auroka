@@ -9,16 +9,16 @@ use std::sync::Arc;
 use tempfile::TempDir;
 use tokio::sync::Mutex;
 
-pub struct Chromium {
+pub struct Cdp {
   page: Arc<CdpPage>,
   browser: Arc<Mutex<CdpBrowser>>,
   _temp_dir: TempDir,
 }
 
-impl Chromium {
+impl Cdp {
   pub async fn new() -> Result<Self> {
     let temp_dir = tempfile::Builder::new()
-      .prefix("auroka-test-chromium")
+      .prefix("auroka-test-cdp")
       .tempdir()?;
 
     let config = BrowserConfig::builder()
@@ -48,7 +48,7 @@ impl Chromium {
   }
 }
 
-impl Browser for Chromium {
+impl Browser for Cdp {
   fn goto(&self, url: &str) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
     let url = url.to_string();
     Box::pin(async move {

@@ -1,6 +1,6 @@
 use crate::Locator;
 use crate::backends::Browser;
-use crate::backends::Chromium;
+use crate::backends::Cdp;
 use crate::backends::WebDriver;
 use anyhow::Result;
 use std::sync::Arc;
@@ -24,7 +24,7 @@ impl Page {
 
   pub async fn launch(browser_type: BrowserType) -> Result<Self> {
     let backend: Arc<dyn Browser> = match browser_type {
-      BrowserType::Chromium => Arc::new(Chromium::new().await?),
+      BrowserType::Chromium => Arc::new(Cdp::new().await?),
       BrowserType::Firefox => {
         let caps = FirefoxCapabilities::new();
         // Assuming geckodriver is running on port 4444
