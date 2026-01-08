@@ -1,0 +1,1 @@
+pub mod serves_default_html_content_type_behavior;
