@@ -1,5 +1,5 @@
 use super::element::Element;
-use crate::backends::{Browser, Element as ElementBackend};
+use crate::backends::{Backend, Element as ElementBackend};
 use anyhow::Result;
 use chromiumoxide::{Browser as CdpBrowser, BrowserConfig, Page as CdpPage};
 use futures::StreamExt;
@@ -48,7 +48,7 @@ impl Cdp {
   }
 }
 
-impl Browser for Cdp {
+impl Backend for Cdp {
   fn goto(&self, url: &str) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
     let url = url.to_string();
     Box::pin(async move {

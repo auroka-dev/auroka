@@ -1,5 +1,5 @@
 use crate::Locator;
-use crate::backends::Browser;
+use crate::backends::Backend;
 use crate::backends::Cdp;
 use crate::backends::WebDriver;
 use anyhow::Result;
@@ -8,7 +8,7 @@ use thirtyfour::{FirefoxCapabilities, SafariCapabilities};
 
 #[derive(Clone)]
 pub struct Page {
-  backend: Arc<dyn Browser>,
+  backend: Arc<dyn Backend>,
 }
 
 pub enum BrowserType {
@@ -23,7 +23,7 @@ impl Page {
   }
 
   pub async fn launch(browser_type: BrowserType) -> Result<Self> {
-    let backend: Arc<dyn Browser> = match browser_type {
+    let backend: Arc<dyn Backend> = match browser_type {
       BrowserType::Chromium => Arc::new(Cdp::new().await?),
       BrowserType::Firefox => {
         let caps = FirefoxCapabilities::new();

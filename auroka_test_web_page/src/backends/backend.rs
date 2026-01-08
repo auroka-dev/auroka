@@ -3,7 +3,7 @@ use anyhow::Result;
 use std::future::Future;
 use std::pin::Pin;
 
-pub trait Browser: Send + Sync {
+pub trait Backend: Send + Sync {
   fn goto(&self, url: &str) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>>;
   fn find_element(
     &self,

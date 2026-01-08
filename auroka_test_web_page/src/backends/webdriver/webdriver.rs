@@ -1,5 +1,5 @@
 use super::element::Element;
-use crate::backends::{Browser, Element as ElementBackend};
+use crate::backends::{Backend, Element as ElementBackend};
 use anyhow::Result;
 use std::future::Future;
 use std::pin::Pin;
@@ -26,7 +26,7 @@ impl WebDriver {
   }
 }
 
-impl Browser for WebDriver {
+impl Backend for WebDriver {
   fn goto(&self, url: &str) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
     let url = url.to_string();
     Box::pin(async move {

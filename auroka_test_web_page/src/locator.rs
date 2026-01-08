@@ -1,22 +1,22 @@
-use crate::backends::Browser;
+use crate::backends::Backend;
 use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Locator {
-  browser: Arc<dyn Browser>,
+  backend: Arc<dyn Backend>,
   selector: String,
 }
 
 impl Locator {
-  pub fn new(browser: Arc<dyn Browser>, selector: &str) -> Self {
+  pub fn new(backend: Arc<dyn Backend>, selector: &str) -> Self {
     Self {
-      browser,
+      backend,
       selector: selector.to_string(),
     }
   }
 
-  pub fn browser(&self) -> &Arc<dyn Browser> {
-    &self.browser
+  pub fn backend(&self) -> &Arc<dyn Backend> {
+    &self.backend
   }
 
   pub fn selector(&self) -> &str {

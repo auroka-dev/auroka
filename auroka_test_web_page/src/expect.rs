@@ -13,7 +13,7 @@ impl Expect {
   pub async fn to_have_text(&self, expected: &str) -> Result<()> {
     let element = self
       .locator
-      .browser()
+      .backend()
       .find_element(self.locator.selector())
       .await?;
     let text = element
