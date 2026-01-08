@@ -68,6 +68,13 @@ impl Browser for Chromium {
     })
   }
 
+  fn content(&self) -> Pin<Box<dyn Future<Output = Result<String>> + Send + '_>> {
+    Box::pin(async move {
+      let content = self.page.content().await?;
+      Ok(content)
+    })
+  }
+
   fn close(&self) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
     Box::pin(async move {
       self.browser.lock().await.close().await?;

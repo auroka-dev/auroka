@@ -54,6 +54,10 @@ impl Page {
     Locator::new(self.backend.clone(), selector)
   }
 
+  pub async fn content(&self) -> Result<String> {
+    self.backend.content().await
+  }
+
   pub async fn close(&self) -> Result<()> {
     self.backend.close().await?;
     Ok(())

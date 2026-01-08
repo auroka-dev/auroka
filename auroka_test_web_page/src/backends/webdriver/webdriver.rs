@@ -46,6 +46,13 @@ impl Browser for WebDriver {
     })
   }
 
+  fn content(&self) -> Pin<Box<dyn Future<Output = Result<String>> + Send + '_>> {
+    Box::pin(async move {
+      let content = self.driver.source().await?;
+      Ok(content)
+    })
+  }
+
   fn close(&self) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
     let driver = self.driver.clone();
     Box::pin(async move {

@@ -9,7 +9,11 @@ where
   F: FnOnce(Page) -> Fut,
   Fut: Future<Output = anyhow::Result<()>>,
 {
-  let url = format!("{}{}", BASE_URL, path);
+  let url = if path.starts_with("http") {
+    path.to_string()
+  } else {
+    format!("{}{}", BASE_URL, path)
+  };
   let page = Page::goto(&url).await?;
   let result = test_fn(page.clone()).await;
   let close_result = page.close().await;
@@ -18,6 +22,9 @@ where
 
 #[macro_export]
 macro_rules! with_page {
+  ($base:expr, $path:expr, |$page:ident| $body:block) => {
+    $crate::with_page!(&format!("{}{}", $base, $path), |$page| $body)
+  };
   ($path:expr, |$page:ident| $body:block) => {
     $crate::with_page_internal($path, |$page| async move {
       $body

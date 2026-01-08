@@ -9,5 +9,6 @@ pub trait Browser: Send + Sync {
     &self,
     selector: &str,
   ) -> Pin<Box<dyn Future<Output = Result<Box<dyn Element>>> + Send + '_>>;
+  fn content(&self) -> Pin<Box<dyn Future<Output = Result<String>> + Send + '_>>;
   fn close(&self) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>>;
 }
