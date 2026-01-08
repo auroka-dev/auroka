@@ -42,7 +42,7 @@ where
 
 #[doc(hidden)]
 pub async fn with_server_internal<F, Fut, R>(
-  routes: Vec<(&'static str, MockResponse)>,
+  routes: Vec<(String, String, MockResponse)>,
   test_fn: F,
 ) -> anyhow::Result<()>
 where
@@ -54,9 +54,9 @@ where
   let port = listener.local_addr()?.port();
   let base_url = format!("http://127.0.0.1:{}", port);
 
-  let route_map: HashMap<String, MockResponse> = routes
+  let route_map: HashMap<(String, String), MockResponse> = routes
     .into_iter()
-    .map(|(k, v)| (k.to_string(), v))
+    .map(|(method, path, resp)| ((method, path), resp))
     .collect();
   let route_map = Arc::new(route_map);
 
@@ -77,10 +77,10 @@ where
 
         let request = String::from_utf8_lossy(&buf[..n]);
         let mut parts = request.split_whitespace();
-        if let Some(_method) = parts.next() {
+        if let Some(method) = parts.next() {
           if let Some(raw_path) = parts.next() {
             let path = raw_path.split('?').next().unwrap_or(raw_path);
-            if let Some(response) = route_map.get(path) {
+            if let Some(response) = route_map.get(&(method.to_string(), path.to_string())) {
               let reason = status_reason(response.status);
               let response_str = format!(
                 "HTTP/1.1 {} {}\r\nContent-Type: {}\r\nContent-Length: {}\r\n\r\n{}",
@@ -110,18 +110,41 @@ where
 
 #[macro_export]
 macro_rules! with_server {
-  // Arrow syntax with trailing comma separator
-  // e.g. "/path" => "content", |url| ...
-  // Note: $path must be a literal (string) to avoid ambiguity with the closure |...|
-  ( $( $path:literal => $content:expr ),* , |$base_url:ident| $body:block ) => {
-    {
-      use $crate::IntoMockResponse;
-      $crate::with_server_internal(vec![ $( ($path, $content.into_mock_response()) ),* ], |$base_url| async move {
-        use $crate::IntoTestResult;
-        let res = { $body };
-        res.into_test_result()
-      })
-      .await
-    }
+  // 1. First route is Method-based: "Path" :Method => Content
+  ( $path:literal : $method:ident => $content:expr, $($rest:tt)+ ) => {
+    with_server!(@internal_init vec![ (stringify!($method).to_uppercase(), $path.to_string(), { use $crate::IntoMockResponse; $content.into_mock_response() }) ], $($rest)+)
+  };
+
+  // 2. First route is Default (GET): "Path" => Content
+  ( $path:literal => $content:expr, $($rest:tt)+ ) => {
+    with_server!(@internal_init vec![ ("GET".to_string(), $path.to_string(), { use $crate::IntoMockResponse; $content.into_mock_response() }) ], $($rest)+)
+  };
+
+  // 3. Stop condition: Closure
+  (@internal_init $vec:expr, |$base_url:ident| $body:block ) => {
+    $crate::with_server_internal($vec, |$base_url| async move {
+      use $crate::IntoTestResult;
+      let res = { $body };
+      res.into_test_result()
+    })
+    .await
+  };
+
+  // 4. Recursive: Next route is Method-based
+  (@internal_init $vec:expr, $path:literal : $method:ident => $content:expr, $($rest:tt)+ ) => {
+    with_server!(@internal_init {
+      let mut v = $vec;
+      v.push((stringify!($method).to_uppercase(), $path.to_string(), { use $crate::IntoMockResponse; $content.into_mock_response() }));
+      v
+    }, $($rest)+)
+  };
+
+  // 5. Recursive: Next route is Default (GET)
+  (@internal_init $vec:expr, $path:literal => $content:expr, $($rest:tt)+ ) => {
+    with_server!(@internal_init {
+      let mut v = $vec;
+      v.push(("GET".to_string(), $path.to_string(), { use $crate::IntoMockResponse; $content.into_mock_response() }));
+      v
+    }, $($rest)+)
   };
 }
