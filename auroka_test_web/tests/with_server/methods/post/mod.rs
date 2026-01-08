@@ -1,0 +1,1 @@
+mod serves_post_method_behavior;
