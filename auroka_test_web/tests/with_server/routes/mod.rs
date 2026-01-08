@@ -1,2 +1,5 @@
 mod servers_multiple_routes_behavior;
+mod serves_root_path_behavior;
+mod serves_route_ignoring_query_params_behavior;
 mod serves_single_route_behavior;
+mod serves_unknown_route_behavior;

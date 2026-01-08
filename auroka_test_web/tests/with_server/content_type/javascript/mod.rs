@@ -1,0 +1,1 @@
+pub mod serves_javascript_content_type_behavior;

@@ -78,7 +78,8 @@ where
         let request = String::from_utf8_lossy(&buf[..n]);
         let mut parts = request.split_whitespace();
         if let Some(_method) = parts.next() {
-          if let Some(path) = parts.next() {
+          if let Some(raw_path) = parts.next() {
+            let path = raw_path.split('?').next().unwrap_or(raw_path);
             if let Some(response) = route_map.get(path) {
               let reason = status_reason(response.status);
               let response_str = format!(
