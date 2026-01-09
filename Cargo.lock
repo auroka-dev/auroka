@@ -264,6 +264,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "auroka",
+ "auroka_assertions_web_page",
  "auroka_test_web",
  "chromiumoxide",
  "futures",

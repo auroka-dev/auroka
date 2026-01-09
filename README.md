@@ -53,10 +53,10 @@ We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing (`
 #### Supported Browsers
 The framework supports a wide range of browsers and environments:
 
-| Category | Browsers / Variants | Backend |
-| :--- | :--- | :--- |
-| **Desktop** | Chromium, Google Chrome, Firefox, Safari, Edge, Opera, WebKit (GNOME Web) | CDP (Chromium) or WebDriver |
-| **Mobile** | Android (Chrome, Firefox, Opera), iOS (Safari Simulator) | WebDriver (via ADB or Simulator) |
+| Category    | Browsers / Variants                                                                                  | Backend                          |
+| :---------- | :--------------------------------------------------------------------------------------------------- | :------------------------------- |
+| **Desktop** | Chromium, Google Chrome, Firefox, Safari, Safari Technology Preview, Edge, Opera, WebKit (GNOME Web) | CDP (Chromium) or WebDriver      |
+| **Mobile**  | Android (Chrome, Firefox, Opera), iOS (Safari Simulator)                                             | WebDriver (via ADB or Simulator) |
 
 *Note: Chromium is the default via direct CDP integration. Others require their respective WebDriver executables (e.g., `geckodriver`, `safaridriver`).*
 
@@ -71,12 +71,14 @@ async fn loads_home_in_german_behavior() -> anyhow::Result<()> {
   with_server!(
     "/de" => "<html><body><footer><div class=\"socials\">Folgen Sie uns in den sozialen Medien:</div></footer></body></html>",
     |base_url| {
-      with_page!(base_url, "/de", |page| {
-        assert_has_text!(
-          page.locator("footer .socials"),
-          "Folgen Sie uns in den sozialen Medien:"
-        );
-      })
+      with_page! {
+        base_url, "/de", |page| {
+          assert_has_text!(
+            page.locator("footer .socials"),
+            "Folgen Sie uns in den sozialen Medien:"
+          );
+        }
+      }
     }
   )
 }
@@ -133,9 +135,10 @@ The testing stack is designed to be fully compatible with standard Rust tooling 
         - [x] **High-Level Browser Automation**:
             - [x] **Chrome DevTools Protocol (CDP)**: Direct integration for high-performance testing without WebDriver overhead.
             - [x] **Playwright-like API**: Rust-native `Page`, `Locator`, and `Expect` abstractions.
-            - [ ] **Cross-Browser Support**:
-                - [ ] Chromium (Chrome/Edge) via CDP.
-                - [ ] Firefox/WebKit (Planned).
+            - [x] **Cross-Browser Support**:
+                - [x] **Chromium** (CDP).
+                - [x] **WebDriver**: Chrome, Firefox, Safari (+Tech Preview), Edge, Opera, WebKit.
+                - [x] **Mobile**: Android (Chrome/Firefox/Opera) & iOS Simulator.
         - [ ] Verifies the full stack from UI down to the Worker.
 
 - [ ] **Platform Support** (Target Runtimes):
