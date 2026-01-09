@@ -53,16 +53,22 @@ We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing. T
 The syntax is designed to be clean and idiomatic, supporting `async/await` and declarative macros for concise assertions.
 
 ```rust
-use auroka_test::web::{assert_has_text, with_page};
+use auroka_test::web::page::{assert_has_text, with_page};
+use auroka_test::web::with_server;
 
 #[auroka::test]
 async fn loads_home_in_german_behavior() -> anyhow::Result<()> {
-  with_page!("/de", |page| {
-    assert_has_text!(
-      page.locator("footer .socials"),
-      "Folgen Sie uns in den sozialen Medien:"
-    );
-  })
+  with_server!(
+    "/de" => "<html><body><footer><div class=\"socials\">Folgen Sie uns in den sozialen Medien:</div></footer></body></html>",
+    |base_url| {
+      with_page!(base_url, "/de", |page| {
+        assert_has_text!(
+          page.locator("footer .socials"),
+          "Folgen Sie uns in den sozialen Medien:"
+        );
+      })
+    }
+  )
 }
 ```
 
