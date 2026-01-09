@@ -1,2 +1,2 @@
-mod considers_page_with_absolute_url_behavior;
-mod considers_page_with_base_url_and_path_behavior;
+mod path;
+mod url;

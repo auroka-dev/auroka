@@ -1,0 +1,1 @@
+mod considers_page_with_absolute_url_behavior;

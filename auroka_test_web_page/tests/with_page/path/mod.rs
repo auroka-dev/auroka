@@ -1,0 +1,1 @@
+mod considers_page_with_base_url_and_path_behavior;
