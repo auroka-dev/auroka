@@ -17,6 +17,6 @@ pub async fn assert_has_content_internal(page: &Page, expected: &str) -> Result<
 #[macro_export]
 macro_rules! assert_has_content {
   ($page:expr, $expected:expr) => {
-    $crate::assert_has_content_internal($page, $expected).await?
+    $crate::assert_has_content_internal(&$page, $expected).await?
   };
 }
