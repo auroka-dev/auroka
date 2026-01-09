@@ -38,7 +38,10 @@ By default, `auroka_test_web_page` uses **Chromium** via the Chrome DevTools Pro
 | Platform                     | Variant Enum                     | Backend   | Requirements                                               |
 | :--------------------------- | :------------------------------- | :-------- | :--------------------------------------------------------- |
 | **Chrome Mobile (Emulated)** | `Browser::ChromeMobileEmulation` | CDP       | Chrome installed. Emulates mobile on Desktop (No ADB/SDK). |
+| **Edge Mobile (Emulated)**   | `Browser::EdgeMobileEmulation`   | CDP       | Edge installed. Emulates mobile on Desktop (No ADB/SDK).   |
+| **Opera Mobile (Emulated)**  | `Browser::OperaMobileEmulation`  | CDP       | Opera installed. Emulates mobile on Desktop (No ADB/SDK).  |
 | **Android (Chrome)**         | `Browser::ChromeMobile`          | WebDriver | Android SDK, `chromedriver`, Emulator/Device with Chrome.  |
+| **Android (Edge)**           | `Browser::EdgeMobile`            | WebDriver | Android SDK, `msedgedriver`, Emulator/Device with Edge.    |
 | **Android (Firefox)**        | `Browser::FirefoxMobile`         | WebDriver | Android SDK, `geckodriver`, Emulator/Device with Firefox.  |
 | **Android (Opera)**          | `Browser::OperaMobile`           | WebDriver | Android SDK, `operadriver`, Emulator/Device with Opera.    |
 | **iOS (Safari)**             | `Browser::SafariMobile`          | WebDriver | Xcode, iOS Simulator.                                      |
