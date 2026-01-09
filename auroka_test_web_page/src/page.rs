@@ -1,3 +1,4 @@
+use crate::Browser;
 use crate::Locator;
 use crate::backends::Backend;
 use crate::backends::Cdp;
@@ -11,26 +12,20 @@ pub struct Page {
   backend: Arc<dyn Backend>,
 }
 
-pub enum BrowserType {
-  Chromium,
-  Firefox,
-  Safari,
-}
-
 impl Page {
   pub async fn new() -> Result<Self> {
-    Self::launch(BrowserType::Chromium).await
+    Self::launch(Browser::Chromium).await
   }
 
-  pub async fn launch(browser_type: BrowserType) -> Result<Self> {
-    let backend: Arc<dyn Backend> = match browser_type {
-      BrowserType::Chromium => Arc::new(Cdp::new().await?),
-      BrowserType::Firefox => {
+  pub async fn launch(browser: Browser) -> Result<Self> {
+    let backend: Arc<dyn Backend> = match browser {
+      Browser::Chromium => Arc::new(Cdp::new().await?),
+      Browser::Firefox => {
         let caps = FirefoxCapabilities::new();
         // Assuming geckodriver is running on port 4444
         Arc::new(WebDriver::with_caps("http://localhost:4444", caps).await?)
       }
-      BrowserType::Safari => {
+      Browser::Safari => {
         let caps = SafariCapabilities::new();
         // Assuming safaridriver is running on port 4444
         Arc::new(WebDriver::with_caps("http://localhost:4444", caps).await?)
