@@ -25,22 +25,23 @@ By default, `auroka_test_web_page` uses **Chromium** via the Chrome DevTools Pro
 | Browser                 | Variant Enum                       | Backend   | Driver Requirement            |
 | :---------------------- | :--------------------------------- | :-------- | :---------------------------- |
 | **Chromium** (Default)  | `Browser::Chromium`                | CDP       | Chrome or Chromium installed. |
-| **Google Chrome**       | `Browser::Chrome`                  | WebDriver | `chromedriver`                |
+| **Google Chrome**       | `Browser::Chrome`                  | CDP       | Chrome installed.             |
 | **Firefox**             | `Browser::Firefox`                 | WebDriver | `geckodriver`                 |
 | **Safari** (macOS)      | `Browser::Safari`                  | WebDriver | `safaridriver` (Built-in)     |
 | **Safari Tech Preview** | `Browser::SafariTechnologyPreview` | WebDriver | `safaridriver`                |
-| **Microsoft Edge**      | `Browser::Edge`                    | WebDriver | `msedgedriver`                |
-| **Opera**               | `Browser::Opera`                   | WebDriver | `operadriver`                 |
+| **Microsoft Edge**      | `Browser::Edge`                    | CDP       | Edge installed.               |
+| **Opera**               | `Browser::Opera`                   | CDP       | Opera installed.              |
 | **WebKit** (GNOME Web)  | `Browser::WebKit`                  | WebDriver | `webkit-webdriver`            |
 
 ### Mobile Support
 
-| Platform              | Variant Enum             | Requirements                                              |
-| :-------------------- | :----------------------- | :-------------------------------------------------------- |
-| **Android (Chrome)**  | `Browser::ChromeMobile`  | Android SDK, `chromedriver`, Emulator/Device with Chrome. |
-| **Android (Firefox)** | `Browser::FirefoxMobile` | Android SDK, `geckodriver`, Emulator/Device with Firefox. |
-| **Android (Opera)**   | `Browser::OperaMobile`   | Android SDK, `operadriver`, Emulator/Device with Opera.   |
-| **iOS (Safari)**      | `Browser::SafariMobile`  | Xcode, iOS Simulator.                                     |
+| Platform                     | Variant Enum                     | Backend   | Requirements                                               |
+| :--------------------------- | :------------------------------- | :-------- | :--------------------------------------------------------- |
+| **Chrome Mobile (Emulated)** | `Browser::ChromeMobileEmulation` | CDP       | Chrome installed. Emulates mobile on Desktop (No ADB/SDK). |
+| **Android (Chrome)**         | `Browser::ChromeMobile`          | WebDriver | Android SDK, `chromedriver`, Emulator/Device with Chrome.  |
+| **Android (Firefox)**        | `Browser::FirefoxMobile`         | WebDriver | Android SDK, `geckodriver`, Emulator/Device with Firefox.  |
+| **Android (Opera)**          | `Browser::OperaMobile`           | WebDriver | Android SDK, `operadriver`, Emulator/Device with Opera.    |
+| **iOS (Safari)**             | `Browser::SafariMobile`          | WebDriver | Xcode, iOS Simulator.                                      |
 
 ### Installation (macOS via Homebrew)
 
