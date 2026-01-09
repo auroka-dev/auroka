@@ -48,7 +48,17 @@ async fn test_kv_flow() {
 
 ### Browser Automation
 
-We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing. This allows you to control a browser (Chromium via CDP or others via WebDriver) directly from your Rust tests.
+We provide a high-level, Playwright-inspired API for End-to-End (E2E) testing (`auroka_test_web`). This allows you to control a browser directly from your Rust tests using a clean, idiomatic `async` API.
+
+#### Supported Browsers
+The framework supports a wide range of browsers and environments:
+
+| Category | Browsers / Variants | Backend |
+| :--- | :--- | :--- |
+| **Desktop** | Chromium, Google Chrome, Firefox, Safari, Edge, Opera, WebKit (GNOME Web) | CDP (Chromium) or WebDriver |
+| **Mobile** | Android (Chrome, Firefox, Opera), iOS (Safari Simulator) | WebDriver (via ADB or Simulator) |
+
+*Note: Chromium is the default via direct CDP integration. Others require their respective WebDriver executables (e.g., `geckodriver`, `safaridriver`).*
 
 The syntax is designed to be clean and idiomatic, supporting `async/await` and declarative macros for concise assertions.
 

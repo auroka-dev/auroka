@@ -16,9 +16,49 @@ This crate provides a clean, async API to control browsers (Chromium, Firefox, S
 -   **Macros**:
     -   `with_page!`: Helper to manage browser lifecycle and navigation.
 
+## Browser Setup & Dependencies
+
+By default, `auroka_test_web_page` uses **Chromium** via the Chrome DevTools Protocol (CDP). Explicitly installing drivers is only necessary if you plan to use other browsers (Firefox, Safari, etc.).
+
+### Supported Browsers
+
+| Browser | Variant Enum | Backend | Driver Requirement |
+| :--- | :--- | :--- | :--- |
+| **Chromium** (Default) | `Browser::Chromium` | CDP | Chrome or Chromium installed. |
+| **Google Chrome** | `Browser::Chrome` | WebDriver | `chromedriver` |
+| **Firefox** | `Browser::Firefox` | WebDriver | `geckodriver` |
+| **Safari** (macOS) | `Browser::Safari` | WebDriver | `safaridriver` (Built-in) |
+| **Safari Tech Preview** | `Browser::SafariTechnologyPreview` | WebDriver | `safaridriver` |
+| **Microsoft Edge** | `Browser::Edge` | WebDriver | `msedgedriver` |
+| **Opera** | `Browser::Opera` | WebDriver | `operadriver` |
+| **WebKit** (GNOME Web) | `Browser::WebKit` | WebDriver | `webkit-webdriver` |
+
+### Mobile Support
+
+| Platform | Variant Enum | Requirements |
+| :--- | :--- | :--- |
+| **Android (Chrome)** | `Browser::ChromeMobile` | Android SDK, `chromedriver`, Emulator/Device with Chrome. |
+| **Android (Firefox)** | `Browser::FirefoxMobile` | Android SDK, `geckodriver`, Emulator/Device with Firefox. |
+| **Android (Opera)** | `Browser::OperaMobile` | Android SDK, `operadriver`, Emulator/Device with Opera. |
+| **iOS (Safari)** | `Browser::SafariMobile` | Xcode, iOS Simulator. |
+
+### Installation (macOS via Homebrew)
+
+```bash
+# Browsers
+brew install --cask google-chrome firefox microsoft-edge opera
+
+# Drivers
+brew install chromedriver geckodriver msedgedriver operadriver
+```
+
+**Safari**: Run `safaridriver --enable`.
+
+**Android**: Install Android Studio, ensure `adb` is in PATH, and start an emulator.
+
 ## Usage
 
-### Basic Navigation and Content Assertion
+### Basic Navigation (Default Chromium)
 
 ```rust
 use auroka_test_web_page::{with_page, expect};
@@ -30,6 +70,31 @@ async fn test_example_com() -> anyhow::Result<()> {
         let content = page.content().await?;
         assert!(content.contains("Example Domain"));
     })
+}
+```
+
+### Using Specific Browsers
+
+To use a specific browser (e.g., Firefox, Mobile Safari), use `Page::launch` directly.
+
+```rust
+use auroka_test_web_page::{Page, Browser, Locator, expect};
+
+#[auroka::test]
+async fn test_on_firefox() -> anyhow::Result<()> {
+    // Launch Firefox (requires geckodriver running on port 4444)
+    let page = Page::launch(Browser::Firefox).await?;
+    
+    // Navigate manually
+    page.navigate("https://example.com").await?;
+
+    // Perform assertions
+    let locator = page.locator("h1");
+    // ... use locator ...
+
+    // Close the page
+    page.close().await?;
+    Ok(())
 }
 ```
 
@@ -74,11 +139,6 @@ async fn test_local_handler() -> anyhow::Result<()> {
 -   **Backends**: Abstracts over CDP (`chromiumoxide`) and WebDriver (`thirtyfour`).
 -   **Page**: The main entry point. Currently defaults to Chromium (CDP) when using `with_page!`.
 -   **Locator**: Lazy reference to elements. Elements are located only when an action (like assertion) is performed.
-
-## Dependencies
-
--   **Chromium**: Required for the default backend. The library looks for a local Chrome/Chromium installation.
--   **WebDriver**: If using Firefox or Safari backends explicitly, their respective drivers must be running.
 
 ## Safe and Hermetic
 

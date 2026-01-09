@@ -267,6 +267,7 @@ dependencies = [
  "auroka_test_web",
  "chromiumoxide",
  "futures",
+ "serde_json",
  "tempfile",
  "thirtyfour",
  "tokio",
