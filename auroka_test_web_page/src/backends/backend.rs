@@ -10,5 +10,10 @@ pub trait Backend: Send + Sync {
     selector: &str,
   ) -> Pin<Box<dyn Future<Output = Result<Box<dyn Element>>> + Send + '_>>;
   fn content(&self) -> Pin<Box<dyn Future<Output = Result<String>> + Send + '_>>;
+  fn set_viewport(
+    &self,
+    width: u32,
+    height: u32,
+  ) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>>;
   fn close(&self) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>>;
 }

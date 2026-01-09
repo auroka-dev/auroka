@@ -10,18 +10,138 @@ use thirtyfour::{
   EdgeCapabilities, FirefoxCapabilities, SafariCapabilities,
 };
 
+#[derive(Clone, Debug)]
+pub struct Geolocation {
+  pub latitude: f64,
+  pub longitude: f64,
+  pub accuracy: Option<f64>,
+}
+
+#[derive(Clone, Debug)]
+pub enum Viewport {
+  /// 1280 x 720
+  HD,
+  /// 1920 x 1080
+  FHD,
+  /// 3840 x 2160
+  UHD4K,
+  /// 5120 x 2880
+  UHD5K,
+  /// Custom (width, height)
+  Custom(u32, u32),
+}
+
+impl Viewport {
+  pub fn dimensions(&self) -> (u32, u32) {
+    match self {
+      Viewport::HD => (1280, 720),
+      Viewport::FHD => (1920, 1080),
+      Viewport::UHD4K => (3840, 2160),
+      Viewport::UHD5K => (5120, 2880),
+      Viewport::Custom(w, h) => (*w, *h),
+    }
+  }
+}
+
+#[derive(Clone, Debug)]
+pub struct PageConfig {
+  pub browser: Browser,
+  pub viewport: Option<Viewport>,
+  pub is_mobile: bool,
+  pub is_landscape: bool,
+  pub geolocation: Option<Geolocation>,
+  pub permissions: Vec<String>,
+}
+
+impl Default for PageConfig {
+  fn default() -> Self {
+    Self {
+      browser: Browser::Chromium,
+      viewport: None,
+      is_mobile: false,
+      is_landscape: false,
+      geolocation: None,
+      permissions: Vec::new(),
+    }
+  }
+}
+
+impl From<Browser> for PageConfig {
+  fn from(browser: Browser) -> Self {
+    Self {
+      browser,
+      ..Default::default()
+    }
+  }
+}
+
+impl PageConfig {
+  pub fn new() -> Self {
+    Self::default()
+  }
+
+  pub fn browser(mut self, browser: Browser) -> Self {
+    self.browser = browser;
+    self
+  }
+
+  pub fn viewport(mut self, width: u32, height: u32) -> Self {
+    self.viewport = Some(Viewport::Custom(width, height));
+    self
+  }
+
+  pub fn viewport_preset(mut self, preset: Viewport) -> Self {
+    self.viewport = Some(preset);
+    self
+  }
+
+  pub fn mobile(mut self, is_mobile: bool) -> Self {
+    self.is_mobile = is_mobile;
+    self
+  }
+
+  pub fn landscape(mut self, is_landscape: bool) -> Self {
+    self.is_landscape = is_landscape;
+    self
+  }
+
+  pub fn geolocation(mut self, latitude: f64, longitude: f64) -> Self {
+    self.geolocation = Some(Geolocation {
+      latitude,
+      longitude,
+      accuracy: None,
+    });
+    self
+  }
+
+  pub fn permissions(mut self, permissions: Vec<String>) -> Self {
+    self.permissions = permissions;
+    self
+  }
+}
+
 #[derive(Clone)]
 pub struct Page {
   backend: Arc<dyn Backend>,
+  is_android: bool,
 }
 
 impl Page {
   pub async fn new() -> Result<Self> {
-    Self::launch(Browser::Chromium).await
+    Self::launch(PageConfig::default()).await
   }
 
-  pub async fn launch(browser: Browser) -> Result<Self> {
-    let backend: Arc<dyn Backend> = match browser {
+  pub async fn launch<C>(config: C) -> Result<Self>
+  where
+    C: Into<PageConfig>,
+  {
+    let config = config.into();
+    let is_android = matches!(
+      config.browser,
+      Browser::ChromeMobile | Browser::FirefoxMobile | Browser::OperaMobile
+    );
+
+    let backend: Arc<dyn Backend> = match config.browser {
       Browser::Chromium => Arc::new(Cdp::new().await?),
       Browser::Chrome => {
         let caps = ChromeCapabilities::new();
@@ -112,17 +232,34 @@ impl Page {
         Arc::new(WebDriver::with_caps("http://localhost:4444", caps).await?)
       }
     };
-    Ok(Self { backend })
+
+    // Apply viewport configuration if backend supports it
+    if let Some(viewport) = config.viewport {
+      let (width, height) = viewport.dimensions();
+      backend.set_viewport(width, height).await?;
+    }
+
+    Ok(Self {
+      backend,
+      is_android,
+    })
   }
 
   pub async fn goto(url: &str) -> Result<Self> {
     let page = Self::new().await?;
-    page.backend.goto(url).await?;
+    page.navigate(url).await?;
     Ok(page)
   }
 
   pub async fn navigate(&self, url: &str) -> Result<()> {
-    self.backend.goto(url).await?;
+    let url = if self.is_android {
+      url
+        .replace("127.0.0.1", "10.0.2.2")
+        .replace("localhost", "10.0.2.2")
+    } else {
+      url.to_string()
+    };
+    self.backend.goto(&url).await?;
     Ok(())
   }
 

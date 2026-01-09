@@ -1,6 +1,7 @@
 use super::element::Element;
 use crate::backends::{Backend, Element as ElementBackend};
 use anyhow::Result;
+use chromiumoxide::cdp::browser_protocol::emulation::SetDeviceMetricsOverrideParams;
 use chromiumoxide::{Browser as CdpBrowser, BrowserConfig, Page as CdpPage};
 use futures::StreamExt;
 use std::future::Future;
@@ -72,6 +73,27 @@ impl Backend for Cdp {
     Box::pin(async move {
       let content = self.page.content().await?;
       Ok(content)
+    })
+  }
+
+  fn set_viewport(
+    &self,
+    width: u32,
+    height: u32,
+  ) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
+    Box::pin(async move {
+      let params = SetDeviceMetricsOverrideParams::builder()
+        .width(width as i32)
+        .height(height as i32)
+        .device_scale_factor(1.0)
+        .mobile(false)
+        .build()
+        // Unwrapping here because errors in building params are usually programmatic validation errors
+        // and we want valid params. The builder might return Result<Params, String>.
+        .map_err(|e| anyhow::anyhow!("Failed to build SetDeviceMetricsOverrideParams: {}", e))?;
+
+      self.page.execute(params).await?;
+      Ok(())
     })
   }
 

@@ -1,0 +1,1 @@
+mod uses_resolution_1024x768_behavior;

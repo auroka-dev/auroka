@@ -22,25 +22,25 @@ By default, `auroka_test_web_page` uses **Chromium** via the Chrome DevTools Pro
 
 ### Supported Browsers
 
-| Browser | Variant Enum | Backend | Driver Requirement |
-| :--- | :--- | :--- | :--- |
-| **Chromium** (Default) | `Browser::Chromium` | CDP | Chrome or Chromium installed. |
-| **Google Chrome** | `Browser::Chrome` | WebDriver | `chromedriver` |
-| **Firefox** | `Browser::Firefox` | WebDriver | `geckodriver` |
-| **Safari** (macOS) | `Browser::Safari` | WebDriver | `safaridriver` (Built-in) |
-| **Safari Tech Preview** | `Browser::SafariTechnologyPreview` | WebDriver | `safaridriver` |
-| **Microsoft Edge** | `Browser::Edge` | WebDriver | `msedgedriver` |
-| **Opera** | `Browser::Opera` | WebDriver | `operadriver` |
-| **WebKit** (GNOME Web) | `Browser::WebKit` | WebDriver | `webkit-webdriver` |
+| Browser                 | Variant Enum                       | Backend   | Driver Requirement            |
+| :---------------------- | :--------------------------------- | :-------- | :---------------------------- |
+| **Chromium** (Default)  | `Browser::Chromium`                | CDP       | Chrome or Chromium installed. |
+| **Google Chrome**       | `Browser::Chrome`                  | WebDriver | `chromedriver`                |
+| **Firefox**             | `Browser::Firefox`                 | WebDriver | `geckodriver`                 |
+| **Safari** (macOS)      | `Browser::Safari`                  | WebDriver | `safaridriver` (Built-in)     |
+| **Safari Tech Preview** | `Browser::SafariTechnologyPreview` | WebDriver | `safaridriver`                |
+| **Microsoft Edge**      | `Browser::Edge`                    | WebDriver | `msedgedriver`                |
+| **Opera**               | `Browser::Opera`                   | WebDriver | `operadriver`                 |
+| **WebKit** (GNOME Web)  | `Browser::WebKit`                  | WebDriver | `webkit-webdriver`            |
 
 ### Mobile Support
 
-| Platform | Variant Enum | Requirements |
-| :--- | :--- | :--- |
-| **Android (Chrome)** | `Browser::ChromeMobile` | Android SDK, `chromedriver`, Emulator/Device with Chrome. |
+| Platform              | Variant Enum             | Requirements                                              |
+| :-------------------- | :----------------------- | :-------------------------------------------------------- |
+| **Android (Chrome)**  | `Browser::ChromeMobile`  | Android SDK, `chromedriver`, Emulator/Device with Chrome. |
 | **Android (Firefox)** | `Browser::FirefoxMobile` | Android SDK, `geckodriver`, Emulator/Device with Firefox. |
-| **Android (Opera)** | `Browser::OperaMobile` | Android SDK, `operadriver`, Emulator/Device with Opera. |
-| **iOS (Safari)** | `Browser::SafariMobile` | Xcode, iOS Simulator. |
+| **Android (Opera)**   | `Browser::OperaMobile`   | Android SDK, `operadriver`, Emulator/Device with Opera.   |
+| **iOS (Safari)**      | `Browser::SafariMobile`  | Xcode, iOS Simulator.                                     |
 
 ### Installation (macOS via Homebrew)
 
@@ -66,37 +66,56 @@ use auroka_test_web_page::{with_page, expect};
 #[auroka::test]
 async fn test_example_com() -> anyhow::Result<()> {
     // Pass a full URL to navigate explicitly
-    with_page!("https://example.com", |page| {
-        let content = page.content().await?;
-        assert!(content.contains("Example Domain"));
-    })
+  with_page! {
+    "https://example.com", |page| {
+      let content = page.content().await?;
+      assert!(content.contains("Example Domain"));
+    }
+  }
 }
 ```
 
 ### Using Specific Browsers
 
-To use a specific browser (e.g., Firefox, Mobile Safari), use `Page::launch` directly.
+To use a specific browser (e.g., Firefox, Edge), simply use the browser tag in the `with_page!` macro.
 
 ```rust
-use auroka_test_web_page::{Page, Browser, Locator, expect};
+use auroka_test_web_page::with_page;
+use auroka_assertions_web_page::assert_has_text;
 
 #[auroka::test]
 async fn test_on_firefox() -> anyhow::Result<()> {
-    // Launch Firefox (requires geckodriver running on port 4444)
-    let page = Page::launch(Browser::Firefox).await?;
-    
-    // Navigate manually
-    page.navigate("https://example.com").await?;
-
-    // Perform assertions
-    let locator = page.locator("h1");
-    // ... use locator ...
-
-    // Close the page
-    page.close().await?;
-    Ok(())
+  with_page! { :Firefox
+    "https://example.com", |page| {
+          assert_has_text!(page.locator("h1"), "Example Domain");
+    }
+  }
 }
 ```
+
+### Viewport and Device Emulation
+
+You can configure the viewport size, orientation, and mobile emulation mode declaratively.
+
+```rust
+use auroka_test_web_page::with_page;
+
+#[auroka::test]
+async fn test_mobile_layout() -> anyhow::Result<()> {
+  with_page! { :Chrome :Mobile :Landscape :FHD
+    "https://example.com", |page| {
+        // Test in a simulated FHD Mobile Landscape environment
+    }
+  }
+}
+```
+
+Supported flags:
+-   **Browsers**: `:Chrome`, `:Chromium`, `:Firefox`, `:Safari`, `:Edge`, etc.
+-   **Presets**: `:HD` (1280x720), `:FHD` (1920x1080), `:4K`, `:5K`.
+-   **Modes**: `:Mobile`, `:Landscape`.
+-   **Custom**: `:1024 x 768`.
+-   **Advanced**: `:Permissions(["camera"])`, `:GeoLocation(37.7, -122.4)`.
 
 ### Locators and Declarative Assertions
 
@@ -105,10 +124,12 @@ use auroka_test::web::page::{assert_has_text, with_page};
 
 #[auroka::test]
 async fn test_element_text() -> anyhow::Result<()> {
-    with_page!("https://example.com", |page| {
-        // Find element and assert text content using macro
-        assert_has_text!(page.locator("h1"), "Example Domain");
-    })
+  with_page! {
+    "https://example.com", |page| {
+      // Find element and assert text content using macro
+      assert_has_text!(page.locator("h1"), "Example Domain");
+    }
+  }
 }
 ```
 
@@ -122,15 +143,17 @@ use auroka_test::web::with_server;
 
 #[auroka::test]
 async fn test_local_handler() -> anyhow::Result<()> {
-    with_server!(
-        "/hello" => "<body><h1>Hello World</h1></body>",
-        |base_url| {
-            // Combine base_url with relative path
-            with_page!(base_url, "/hello", |page| {
-                 assert_has_text!(page.locator("h1"), "Hello World");
-            })
+  with_server!(
+    "/hello" => "<body><h1>Hello World</h1></body>",
+    |base_url| {
+        // Combine base_url with relative path
+      with_page! {
+        base_url, "/hello", |page| {
+          assert_has_text!(page.locator("h1"), "Hello World");
         }
-    )
+      }
+    }
+  )
 }
 ```
 

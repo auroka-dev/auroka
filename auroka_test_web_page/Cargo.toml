@@ -14,5 +14,6 @@ tokio.workspace = true
 
 [dev-dependencies]
 auroka.workspace = true
+auroka_assertions_web_page.workspace = true
 auroka_test_web.workspace = true
 tokio.workspace = true

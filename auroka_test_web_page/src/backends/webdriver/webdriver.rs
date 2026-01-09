@@ -53,6 +53,22 @@ impl Backend for WebDriver {
     })
   }
 
+  fn set_viewport(
+    &self,
+    width: u32,
+    height: u32,
+  ) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
+    Box::pin(async move {
+      // Set the window size. Usually this includes window decorations,
+      // but it's the closest standard WebDriver command.
+      self
+        .driver
+        .set_window_rect(0, 0, width as u32, height as u32)
+        .await?;
+      Ok(())
+    })
+  }
+
   fn close(&self) -> Pin<Box<dyn Future<Output = Result<()>> + Send + '_>> {
     let driver = self.driver.clone();
     Box::pin(async move {
