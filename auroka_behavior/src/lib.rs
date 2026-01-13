@@ -6,6 +6,30 @@ use expand::expand;
 use outcome::Outcome;
 use proc_macro::TokenStream;
 
+/// Checks a behavior by running a setup sequence and verifying one or more outcomes.
+///
+/// # Example
+///
+/// ```rust
+/// use auroka_behavior::behavior;
+///
+/// // Mock setup for the example
+/// mod auroka { pub use auroka_test_macro::auroka_test as test; }
+/// struct Context;
+/// impl Context { fn new() -> Self { Self } }
+/// fn given_some_state(ctx: &mut Context) {}
+/// fn when_something_happens(ctx: &mut Context) {}
+/// fn then_something_should_be_true(ctx: &Context) {}
+///
+/// behavior! {
+///    given_some_state()
+///    when_something_happens()
+///
+///    "The system works" {
+///      then_something_should_be_true()
+///    }
+/// }
+/// ```
 #[proc_macro]
 pub fn behavior(input: TokenStream) -> TokenStream {
   match expand(proc_macro2::TokenStream::from(input)) {

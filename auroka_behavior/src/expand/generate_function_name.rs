@@ -1,8 +1,8 @@
-use crate::Outcome;
 use quote::format_ident;
 use syn::Ident;
 
-pub(crate) fn generate_function_name(outcomes: &[Outcome]) -> Ident {
+pub(crate) fn generate_function_name(behavior: &crate::Behavior) -> Ident {
+  let outcomes = behavior.outcomes();
   let fn_name_str = if outcomes.is_empty() {
     "no_outcome".to_string()
   } else if outcomes.len() == 1 {
