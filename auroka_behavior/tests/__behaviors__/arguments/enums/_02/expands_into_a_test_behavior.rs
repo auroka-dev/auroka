@@ -28,11 +28,12 @@ behavior! {
   then_the_macro_expansion_should_have(
     &context,
     r#"
-fn something_is_true() {
+fn something_is_true_inner() -> anyhow::Result<()> {
     let mut context = Context::new();
     given_there_is_something(&mut context, Ordering::Equal, Ordering::Equal);
     when_something_happens(&mut context, Ordering::Equal, Ordering::Equal);
     then_something_should_be_true(&context, Ordering::Equal, Ordering::Equal);
+    Ok(())
 }
 "#,
   );

@@ -23,8 +23,5 @@ behavior! {
 
   when_the_macro_is_expanded(&mut context);
 
-  then_the_standard_error_should_have(
-    &context,
-    "error[E0425]: cannot find value `boo` in this scope",
-  );
+  then_the_standard_error_should_have(&context, "error[E0425]: cannot find value `boo` in this scope");
 }

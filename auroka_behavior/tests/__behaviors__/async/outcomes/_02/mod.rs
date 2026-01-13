@@ -1,0 +1,1 @@
+mod expands_as_one_test_behavior;

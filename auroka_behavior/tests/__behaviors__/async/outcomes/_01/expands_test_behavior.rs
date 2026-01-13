@@ -11,15 +11,17 @@ pub fn expands_worker_test_behavior() {
   given_there_is_a_macro_invocation(
     &mut context,
     r#"
-behavior! {
-  given_there_is_something("boo", "cool")
-  when_something_happens("boo", "cool")
+behavior! { :async
+  given_there_is_something()
+  when_something_happens()
 
   "Something is true" {
-    then_something_should_be_true("boo", "cool")
+    then_something_should_be_true()
   }
-}"#,
+}
+"#,
   );
+
   when_the_macro_is_expanded(&mut context);
 
   then_the_standard_error_should_not_have(&context, "error:");
@@ -27,11 +29,11 @@ behavior! {
   then_the_macro_expansion_should_have(
     &context,
     r#"
-fn something_is_true_inner() -> anyhow::Result<()> {
+async fn something_is_true_inner() -> anyhow::Result<()> {
     let mut context = Context::new();
-    given_there_is_something(&mut context, "boo", "cool");
-    when_something_happens(&mut context, "boo", "cool");
-    then_something_should_be_true(&context, "boo", "cool");
+    given_there_is_something(&mut context).await?;
+    when_something_happens(&mut context).await?;
+    then_something_should_be_true(&context).await?;
     Ok(())
 }
 "#,

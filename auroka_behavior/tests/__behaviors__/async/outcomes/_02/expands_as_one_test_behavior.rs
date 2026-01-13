@@ -11,7 +11,7 @@ pub fn expands_worker_test_behavior() {
   given_there_is_a_macro_invocation(
     &mut context,
     r#"
-behavior! {
+behavior! { :async
   given_there_is_something()
   when_something_happens()
 
@@ -32,21 +32,21 @@ behavior! {
   then_the_macro_expansion_should_have(
     &context,
     r#"
-fn compact_inner() -> anyhow::Result<()> {
+async fn compact_inner() -> anyhow::Result<()> {
     let mut context = Context::new();
-    given_there_is_something(&mut context);
-    when_something_happens(&mut context);
+    given_there_is_something(&mut context).await?;
+    when_something_happens(&mut context).await?;
     let mut _errors_ = Vec::new();
     if let Err(err) = std::panic::catch_unwind(
         std::panic::AssertUnwindSafe(|| {
-            then_something_should_be_true(&context);
+            then_something_should_be_true(&context).await?;
         }),
     ) {
         _errors_.push(err);
     }
     if let Err(err) = std::panic::catch_unwind(
         std::panic::AssertUnwindSafe(|| {
-            then_something_else_should_be_true(&context);
+            then_something_else_should_be_true(&context).await?;
         }),
     ) {
         _errors_.push(err);
