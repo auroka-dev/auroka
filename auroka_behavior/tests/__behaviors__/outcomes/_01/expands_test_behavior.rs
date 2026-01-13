@@ -4,13 +4,7 @@ use crate::__steps__::then_the_macro_expansion_should_have;
 use crate::__steps__::then_the_standard_error_should_not_have;
 use crate::__steps__::when_the_macro_is_expanded;
 
-#[test]
-pub fn expands_test_behavior() {
-  let mut context = Context::new();
-
-  given_there_is_a_macro_invocation(
-    &mut context,
-    r#"
+const INPUT: &str = r#"
 behavior! {
   given_there_is_something(Ordering::Equal)
   when_something_happens("HI")
@@ -19,16 +13,9 @@ behavior! {
     then_something_should_be_true()
   }
 }
-"#,
-  );
+"#;
 
-  when_the_macro_is_expanded(&mut context);
-
-  then_the_standard_error_should_not_have(&context, "error:");
-
-  then_the_macro_expansion_should_have(
-    &context,
-    r#"
+const EXPECTED: &str = r#"
 fn something_is_true_inner() -> anyhow::Result<()> {
     let mut context = Context::new();
     given_there_is_something(&mut context, Ordering::Equal);
@@ -36,6 +23,13 @@ fn something_is_true_inner() -> anyhow::Result<()> {
     then_something_should_be_true(&context);
     Ok(())
 }
-"#,
-  );
+"#;
+
+#[test]
+pub fn expands_test_behavior() {
+  let mut context = Context::new();
+  given_there_is_a_macro_invocation(&mut context, INPUT);
+  when_the_macro_is_expanded(&mut context);
+  then_the_standard_error_should_not_have(&context, "error:");
+  then_the_macro_expansion_should_have(&context, EXPECTED);
 }
