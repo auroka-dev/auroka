@@ -20,11 +20,12 @@ fn my_test() {
 "#;
 
 #[test]
-pub fn expands_worker_test_behavior() {
+pub fn expands_worker_test_behavior() -> anyhow::Result<()> {
   let mut context = Context::new();
-  given_there_is_a_macro_invocation(&mut context, SYNC_TEST_INVOCATION);
-  when_the_macro_is_expanded(&mut context);
-  then_the_standard_error_should_not_have(&mut context, "error:");
-  then_the_macro_expansion_should_have(&mut context, EXPECTED_INNER_FUNCTION);
-  then_the_macro_expansion_should_have(&mut context, EXPECTED_OUTER_FUNCTION);
+  given_there_is_a_macro_invocation(&mut context, SYNC_TEST_INVOCATION)?;
+  when_the_macro_is_expanded(&mut context)?;
+  then_the_standard_error_should_not_have(&mut context, "error:")?;
+  then_the_macro_expansion_should_have(&mut context, EXPECTED_INNER_FUNCTION)?;
+  then_the_macro_expansion_should_have(&mut context, EXPECTED_OUTER_FUNCTION)?;
+  Ok(())
 }
