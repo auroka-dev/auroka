@@ -4,12 +4,14 @@ use super::super::super::__steps__::then_the_config_should_contain;
 use super::super::super::__steps__::when_the_config_is_generated;
 
 #[test]
-pub fn imports_workerd_schema_behavior() {
+pub fn imports_workerd_schema_behavior() -> anyhow::Result<()> {
   let mut context = Context::new();
 
-  given_the_assembly_path_is(&mut context, "/tmp/test_worker.wasm");
+  given_the_assembly_path_is(&mut context, "/tmp/test_worker.wasm")?;
 
-  when_the_config_is_generated(&mut context);
+  when_the_config_is_generated(&mut context)?;
 
-  then_the_config_should_contain(&mut context, r#"using Workerd = import "/workerd/workerd.capnp";"#);
+  then_the_config_should_contain(&mut context, r#"using Workerd = import "/workerd/workerd.capnp";"#)?;
+
+  Ok(())
 }

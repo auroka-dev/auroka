@@ -4,12 +4,14 @@ use super::super::super::__steps__::then_the_config_should_contain;
 use super::super::super::__steps__::when_the_config_is_generated;
 
 #[test]
-pub fn configures_port_behavior() {
+pub fn configures_port_behavior() -> anyhow::Result<()> {
   let mut context = Context::new();
 
-  given_the_port_is(&mut context, 9090);
+  given_the_port_is(&mut context, 9090)?;
 
-  when_the_config_is_generated(&mut context);
+  when_the_config_is_generated(&mut context)?;
 
-  then_the_config_should_contain(&mut context, r#"address = "*:9090""#);
+  then_the_config_should_contain(&mut context, r#"address = "*:9090""#)?;
+
+  Ok(())
 }
