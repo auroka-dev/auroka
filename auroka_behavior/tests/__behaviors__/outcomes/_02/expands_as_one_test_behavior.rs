@@ -5,7 +5,7 @@ use crate::__steps__::then_the_standard_error_should_not_have;
 use crate::__steps__::when_the_macro_is_expanded;
 
 #[test]
-pub fn expands_worker_test_behavior() {
+pub fn expands_as_one_test_behavior() {
   let mut context = Context::new();
 
   given_there_is_a_macro_invocation(
