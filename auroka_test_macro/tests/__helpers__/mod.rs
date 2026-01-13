@@ -1,3 +1,7 @@
+mod build_and_expand_package;
+mod create_test_package_with_files;
 mod expand_in_temporary_package;
 
+pub use build_and_expand_package::build_and_expand_package;
+pub use create_test_package_with_files::create_test_package_with_files;
 pub use expand_in_temporary_package::expand_in_temporary_package;
