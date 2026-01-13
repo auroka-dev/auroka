@@ -10,7 +10,7 @@ proc-macro = true
 skip-test-attr = []
 
 [dependencies]
-proc-macro-crate = "3.4.0"
+proc-macro-crate.workspace = true
 proc-macro2.workspace = true
 quote.workspace = true
 syn.workspace = true
@@ -22,4 +22,5 @@ tokio.workspace = true
 auroka_assertions.workspace = true
 auroka_utils.workspace = true
 auroka_utils_packages.workspace = true
+prettyplease.workspace = true
 rand.workspace = true
