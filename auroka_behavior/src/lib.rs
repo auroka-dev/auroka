@@ -14,7 +14,6 @@ use proc_macro::TokenStream;
 /// use auroka_behavior::behavior;
 ///
 /// // Mock setup for the example
-/// mod auroka { pub use auroka_test_macro::auroka_test as test; }
 /// struct Context;
 /// impl Context { fn new() -> Self { Self } }
 /// fn given_some_state(ctx: &mut Context) -> anyhow::Result<()> { Ok(()) }

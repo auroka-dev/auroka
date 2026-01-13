@@ -14,6 +14,7 @@ syn.workspace = true
 
 [dev-dependencies]
 anyhow.workspace = true
+auroka.workspace = true
 auroka_assertions.workspace = true
 auroka_test.workspace = true
 auroka_test_macro.workspace = true

@@ -1,8 +1,4 @@
-use crate::__steps__::Context;
-use crate::__steps__::given_there_is_a_macro_invocation;
-use crate::__steps__::then_the_macro_expansion_should_have;
-use crate::__steps__::then_the_standard_error_should_not_have;
-use crate::__steps__::when_the_macro_is_expanded;
+use crate::__steps__::{Context, given_there_is_a_macro_invocation, then_the_macro_expansion_should_have, then_the_standard_error_should_not_have, when_the_macro_is_expanded};
 
 const INPUT: &str = r#"
 behavior! { :async

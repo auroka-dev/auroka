@@ -1,8 +1,4 @@
-use crate::__steps__::Context;
-use crate::__steps__::given_there_is_a_macro_invocation;
-use crate::__steps__::then_the_macro_expansion_should_have;
-use crate::__steps__::then_the_standard_error_should_not_have;
-use crate::__steps__::when_the_macro_is_expanded;
+use crate::__steps__::{Context, given_there_is_a_macro_invocation, then_the_macro_expansion_should_have, then_the_standard_error_should_not_have, when_the_macro_is_expanded};
 
 const INPUT: &str = r#"
 behavior! { :async
@@ -32,7 +28,16 @@ async fn compact_inner() -> anyhow::Result<()> {
     );
     match result {
         Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => _errors_.push(payload),
+        Err(payload) => {
+            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+                s.to_string()
+            } else if let Some(s) = payload.downcast_ref::<String>() {
+                s.clone()
+            } else {
+                "Unknown panic".to_string()
+            };
+            _errors_.push(Box::new(msg));
+        }
         Ok(Ok(())) => {}
     }
     let result = std::panic::catch_unwind(
@@ -43,7 +48,16 @@ async fn compact_inner() -> anyhow::Result<()> {
     );
     match result {
         Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => _errors_.push(payload),
+        Err(payload) => {
+            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+                s.to_string()
+            } else if let Some(s) = payload.downcast_ref::<String>() {
+                s.clone()
+            } else {
+                "Unknown panic".to_string()
+            };
+            _errors_.push(Box::new(msg));
+        }
         Ok(Ok(())) => {}
     }
     if !_errors_.is_empty() {

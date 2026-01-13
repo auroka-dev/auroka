@@ -10,7 +10,7 @@ pub(crate) fn generate_single_test(behavior: &crate::Behavior, fn_name: &Ident, 
   let stmts = &block.stmts;
 
   quote! {
-      #[auroka::test]
+      #[::auroka::test]
       #async_token fn #fn_name() #return_type {
           let mut context = Context::new();
           #( #setup_stmts )*

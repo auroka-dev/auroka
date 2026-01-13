@@ -10,7 +10,7 @@ pub(crate) fn generate_multi_test(behavior: &crate::Behavior, fn_name: &Ident, s
   let checks: Vec<_> = outcomes.iter().map(generate_check).collect();
 
   quote! {
-      #[auroka::test]
+      #[::auroka::test]
       #async_token fn #fn_name() #return_type {
           let mut context = Context::new();
           #( #setup_stmts )*

@@ -15,7 +15,7 @@ behavior! {
 }"#;
 
 const EXPECTED: &str = r#"
-#[auroka::test]
+#[::auroka::test]
 fn compact() -> anyhow::Result<()> {
     let mut context = Context::new();
     given_there_is_something(&mut context)?;
@@ -23,24 +23,42 @@ fn compact() -> anyhow::Result<()> {
     let mut _errors_ = Vec::new();
     let result = std::panic::catch_unwind(
         std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
-            then_something_should_be_true(&context);
+            then_something_should_be_true(&context)?;
             Ok(())
         }),
     );
     match result {
         Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => _errors_.push(payload),
+        Err(payload) => {
+            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+                s.to_string()
+            } else if let Some(s) = payload.downcast_ref::<String>() {
+                s.clone()
+            } else {
+                "Unknown panic".to_string()
+            };
+            _errors_.push(Box::new(msg));
+        }
         Ok(Ok(())) => {}
     }
     let result = std::panic::catch_unwind(
         std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
-            then_something_else_should_be_true(&context);
+            then_something_else_should_be_true(&context)?;
             Ok(())
         }),
     );
     match result {
         Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => _errors_.push(payload),
+        Err(payload) => {
+            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+                s.to_string()
+            } else if let Some(s) = payload.downcast_ref::<String>() {
+                s.clone()
+            } else {
+                "Unknown panic".to_string()
+            };
+            _errors_.push(Box::new(msg));
+        }
         Ok(Ok(())) => {}
     }
     if !_errors_.is_empty() {
