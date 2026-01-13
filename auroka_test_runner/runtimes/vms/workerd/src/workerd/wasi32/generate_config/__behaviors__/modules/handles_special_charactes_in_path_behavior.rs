@@ -11,8 +11,5 @@ pub fn handles_special_charactes_in_path_behavior() {
 
   when_the_config_is_generated(&mut context);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"(name = "/tmp/my worker.core.wasm", wasm = embed "/tmp/my worker.core.wasm")"#,
-  );
+  then_the_config_should_contain(&mut context, r#"(name = "/tmp/my worker.core.wasm", wasm = embed "/tmp/my worker.core.wasm")"#);
 }

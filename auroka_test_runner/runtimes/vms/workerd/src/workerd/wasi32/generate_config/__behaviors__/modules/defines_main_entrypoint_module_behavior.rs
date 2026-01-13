@@ -11,8 +11,5 @@ pub fn defines_main_entrypoint_module_behavior() {
 
   when_the_config_is_generated(&mut context);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"(name = "main", esModule = embed "adapter.js")"#,
-  );
+  then_the_config_should_contain(&mut context, r#"(name = "main", esModule = embed "adapter.js")"#);
 }

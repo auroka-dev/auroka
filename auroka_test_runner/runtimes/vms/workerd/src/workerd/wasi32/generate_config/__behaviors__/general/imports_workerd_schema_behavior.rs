@@ -11,8 +11,5 @@ pub fn imports_workerd_schema_behavior() {
 
   when_the_config_is_generated(&mut context);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"using Workerd = import "/workerd/workerd.capnp";"#,
-  );
+  then_the_config_should_contain(&mut context, r#"using Workerd = import "/workerd/workerd.capnp";"#);
 }

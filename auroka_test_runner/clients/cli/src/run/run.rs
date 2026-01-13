@@ -34,10 +34,7 @@ pub async fn run() -> TestReport {
     }
   }
 
-  println!(
-    "\ntest result: ok. {} passed; {} failed; 0 ignored; 0 measured\n",
-    passed, failed
-  );
+  println!("\ntest result: ok. {} passed; {} failed; 0 ignored; 0 measured\n", passed, failed);
 
   TestReport::new(passed, failed)
 }

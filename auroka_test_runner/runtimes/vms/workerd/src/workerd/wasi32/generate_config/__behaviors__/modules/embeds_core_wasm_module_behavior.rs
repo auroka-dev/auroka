@@ -11,8 +11,5 @@ pub fn configures_assembly_path_behavior() {
 
   when_the_config_is_generated(&mut context);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"(name = "/tmp/test_worker.core.wasm", wasm = embed "/tmp/test_worker.core.wasm")"#,
-  );
+  then_the_config_should_contain(&mut context, r#"(name = "/tmp/test_worker.core.wasm", wasm = embed "/tmp/test_worker.core.wasm")"#);
 }

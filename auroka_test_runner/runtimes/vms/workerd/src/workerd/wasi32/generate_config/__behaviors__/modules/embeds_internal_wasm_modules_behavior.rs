@@ -11,13 +11,7 @@ pub fn embeds_internal_wasm_modules_behavior() {
 
   when_the_config_is_generated(&mut context);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"(name = "/tmp/test_worker.internal.0.wasm", wasm = embed "/tmp/test_worker.internal.0.wasm")"#,
-  );
+  then_the_config_should_contain(&mut context, r#"(name = "/tmp/test_worker.internal.0.wasm", wasm = embed "/tmp/test_worker.internal.0.wasm")"#);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"(name = "/tmp/test_worker.internal.1.wasm", wasm = embed "/tmp/test_worker.internal.1.wasm")"#,
-  );
+  then_the_config_should_contain(&mut context, r#"(name = "/tmp/test_worker.internal.1.wasm", wasm = embed "/tmp/test_worker.internal.1.wasm")"#);
 }

@@ -12,10 +12,7 @@ pub fn enables_global_outbound_network_behavior() {
   when_the_config_is_generated(&mut context);
 
   // Verify the network service definition
-  then_the_config_should_contain(
-    &mut context,
-    r#"(name = "internet", network = ( allow = ["public", "private"] )),"#,
-  );
+  then_the_config_should_contain(&mut context, r#"(name = "internet", network = ( allow = ["public", "private"] )),"#);
 
   // Verify the worker uses it
   then_the_config_should_contain(&mut context, r#"globalOutbound = "internet""#);

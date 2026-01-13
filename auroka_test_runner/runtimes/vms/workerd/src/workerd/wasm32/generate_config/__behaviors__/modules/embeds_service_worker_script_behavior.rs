@@ -11,8 +11,5 @@ pub fn embeds_service_worker_script_behavior() {
 
   when_the_config_is_generated(&mut context);
 
-  then_the_config_should_contain(
-    &mut context,
-    r#"serviceWorkerScript = embed "/tmp/test_worker.wasm""#,
-  );
+  then_the_config_should_contain(&mut context, r#"serviceWorkerScript = embed "/tmp/test_worker.wasm""#);
 }

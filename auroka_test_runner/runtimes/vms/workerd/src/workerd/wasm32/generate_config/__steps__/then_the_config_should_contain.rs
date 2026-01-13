@@ -4,10 +4,7 @@ use std::io::{Read, Seek, SeekFrom};
 pub fn then_the_config_should_contain(context: &mut Context, expected: &str) {
   let config = context.config();
 
-  assert!(
-    config.is_some(),
-    "Expected config to be generated, but it was not."
-  );
+  assert!(config.is_some(), "Expected config to be generated, but it was not.");
 
   if let Some(config) = config {
     let mut config_file = &config[0];
@@ -21,11 +18,6 @@ pub fn then_the_config_should_contain(context: &mut Context, expected: &str) {
       .read_to_string(&mut content)
       .expect("Failed to read config file");
 
-    assert!(
-      content.contains(expected),
-      "Expected config to contain:\n{}\n\nBut got:\n{}",
-      expected,
-      content
-    );
+    assert!(content.contains(expected), "Expected config to contain:\n{}\n\nBut got:\n{}", expected, content);
   }
 }

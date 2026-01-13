@@ -10,12 +10,7 @@ pub struct Context {
 
 impl Context {
   pub fn new() -> Self {
-    Self {
-      assembly_path: String::new(),
-      config: None,
-      error: None,
-      port: 0,
-    }
+    Self { assembly_path: String::new(), config: None, error: None, port: 0 }
   }
 
   pub fn assembly_path(&self) -> &str {
