@@ -10,5 +10,9 @@ pub fn expand(input: proc_macro2::TokenStream) -> syn::Result<proc_macro2::Token
 
   let fn_name = generate_function_name(&behavior);
 
-  if behavior.outcomes().len() == 1 { Ok(generate_single_test(&behavior, &fn_name, &setup_stmts)) } else { Ok(generate_multi_test(&behavior, &fn_name, &setup_stmts)) }
+  if behavior.outcomes().len() == 1 {
+    return Ok(generate_single_test(&behavior, &fn_name, &setup_stmts));
+  }
+
+  Ok(generate_multi_test(&behavior, &fn_name, &setup_stmts))
 }
