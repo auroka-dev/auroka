@@ -41,10 +41,7 @@ where
 }
 
 #[doc(hidden)]
-pub async fn with_server_internal<F, Fut, R>(
-  routes: Vec<(String, String, MockResponse)>,
-  test_fn: F,
-) -> anyhow::Result<()>
+pub async fn with_server_internal<F, Fut, R>(routes: Vec<(String, String, MockResponse)>, test_fn: F) -> anyhow::Result<()>
 where
   F: FnOnce(String) -> Fut,
   Fut: Future<Output = R>,
@@ -82,14 +79,7 @@ where
             let path = raw_path.split('?').next().unwrap_or(raw_path);
             if let Some(response) = route_map.get(&(method.to_string(), path.to_string())) {
               let reason = status_reason(response.status);
-              let response_str = format!(
-                "HTTP/1.1 {} {}\r\nContent-Type: {}\r\nContent-Length: {}\r\n\r\n{}",
-                response.status,
-                reason,
-                response.content_type,
-                response.body.len(),
-                response.body
-              );
+              let response_str = format!("HTTP/1.1 {} {}\r\nContent-Type: {}\r\nContent-Length: {}\r\n\r\n{}", response.status, reason, response.content_type, response.body.len(), response.body);
               let _ = socket.write_all(response_str.as_bytes()).await;
               return;
             }
