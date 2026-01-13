@@ -10,7 +10,7 @@ pub fn expands_worker_test_behavior() {
   given_there_is_a_macro_invocation(
     &mut context,
     r#"
-#[auroka_test]
+#[auroka::test]
 fn my_test() {
   let _ = 1 + 1;
 }
