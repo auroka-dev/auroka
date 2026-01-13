@@ -1,0 +1,3 @@
+mod expand_in_temporary_package;
+
+pub use expand_in_temporary_package::expand_in_temporary_package;

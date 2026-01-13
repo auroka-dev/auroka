@@ -40,3 +40,9 @@ impl Context {
     self.invocation = Some(invocation.to_string());
   }
 }
+
+impl Default for Context {
+  fn default() -> Self {
+    Self::new()
+  }
+}
