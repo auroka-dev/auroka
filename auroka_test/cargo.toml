@@ -3,15 +3,25 @@ name = "auroka_test"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+default = []
+web = [
+    "dep:auroka_assertions_web",
+    "dep:auroka_assertions_web_page",
+    "dep:auroka_test_runner",
+    "dep:auroka_test_web",
+    "dep:auroka_test_web_page",
+]
+
 [dependencies]
 anyhow = { workspace = true }
-auroka_assertions_web.workspace = true
-auroka_assertions_web_page.workspace = true
+auroka_assertions_web = { workspace = true, optional = true }
+auroka_assertions_web_page = { workspace = true, optional = true }
 auroka_test_macro.workspace = true
 auroka_test_registry.workspace = true
-auroka_test_runner.workspace = true
-auroka_test_web.workspace = true
-auroka_test_web_page.workspace = true
+auroka_test_runner = { workspace = true, optional = true }
+auroka_test_web = { workspace = true, optional = true }
+auroka_test_web_page = { workspace = true, optional = true }
 
 [dev-dependencies]
 tokio = { workspace = true }
