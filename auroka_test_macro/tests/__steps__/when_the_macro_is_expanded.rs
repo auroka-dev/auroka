@@ -17,14 +17,8 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
   // This avoids compiling heavy dependencies like `chromiumoxide` during tests
   // and prevents potential deadlocks with the main workspace lock.
   let mut mock_package = Package::new("auroka_test");
-  mock_package.add_dependency(Dependency::from_member(
-    "auroka_test_macro",
-    "auroka_test_macro",
-  ));
-  mock_package.add_dependency(Dependency::from_member(
-    "auroka_test_registry",
-    "auroka_test_registry",
-  ));
+  mock_package.add_dependency(Dependency::from_member("auroka_test_macro", "auroka_test_macro"));
+  mock_package.add_dependency(Dependency::from_member("auroka_test_registry", "auroka_test_registry"));
 
   mock_package.add_file(FileBuffer::new(
     "src/lib.rs",
@@ -46,10 +40,7 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
   let mock_path = Workspace::target_dir().join(&folder).join("auroka_test");
 
   // We point "auroka_test" to our mock package
-  package.add_dependency(Dependency::from_member(
-    "auroka_test",
-    mock_path.path().to_str().unwrap(),
-  ));
+  package.add_dependency(Dependency::from_member("auroka_test", mock_path.path().to_str().unwrap()));
 
   let invocation = format!(
     r#"use auroka_test::auroka_test;
@@ -62,10 +53,7 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
   package.add_file(FileBuffer::new("src/lib.rs", invocation));
 
   context.data().iter().for_each(|(file_name, content)| {
-    package.add_file(FileBuffer::new(
-      format!("src/__data__/{}", file_name),
-      content.clone(),
-    ));
+    package.add_file(FileBuffer::new(format!("src/__data__/{}", file_name), content.clone()));
   });
 
   let mut package_builder = PackageBuilder::try_new(&folder, package).unwrap();

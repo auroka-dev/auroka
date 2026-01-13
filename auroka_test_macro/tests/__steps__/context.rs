@@ -9,12 +9,7 @@ pub struct Context {
 
 impl Context {
   pub fn new() -> Self {
-    Self {
-      data: HashMap::new(),
-      error: None,
-      expansion: None,
-      invocation: None,
-    }
+    Self { data: HashMap::new(), error: None, expansion: None, invocation: None }
   }
 
   pub fn data(&self) -> &HashMap<String, String> {

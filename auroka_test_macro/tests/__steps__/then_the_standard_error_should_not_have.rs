@@ -2,19 +2,9 @@ use super::Context;
 use std::assert_matches::assert_matches;
 
 pub fn then_the_standard_error_should_not_have(context: &Context, content: &str) {
-  assert_matches!(
-    context.error(),
-    Some(_),
-    "Expected Standard Error to be Some(_) but got {:?}",
-    context.error()
-  );
+  assert_matches!(context.error(), Some(_), "Expected Standard Error to be Some(_) but got {:?}", context.error());
 
   let obtained = context.error().clone().unwrap();
 
-  assert!(
-    !obtained.contains(content),
-    "Expected Standard Error to not contain '{}' but its {}",
-    content,
-    obtained
-  );
+  assert!(!obtained.contains(content), "Expected Standard Error to not contain '{}' but its {}", content, obtained);
 }
