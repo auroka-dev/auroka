@@ -4,7 +4,7 @@ pub(crate) fn process_setup_steps(behavior: &mut crate::Behavior) -> Vec<syn::St
 
   for step in behavior.setup_steps_mut() {
     step.args.insert(0, syn::parse_quote!(&mut context));
-    let expr = if is_async { syn::parse_quote!(#step.await?) } else { syn::parse_quote!(#step) };
+    let expr = if is_async { syn::parse_quote!(#step.await?) } else { syn::parse_quote!(#step?) };
     setup_stmts.push(syn::Stmt::Expr(expr, Some(syn::token::Semi::default())));
   }
 

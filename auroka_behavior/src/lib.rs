@@ -17,9 +17,9 @@ use proc_macro::TokenStream;
 /// mod auroka { pub use auroka_test_macro::auroka_test as test; }
 /// struct Context;
 /// impl Context { fn new() -> Self { Self } }
-/// fn given_some_state(ctx: &mut Context) {}
-/// fn when_something_happens(ctx: &mut Context) {}
-/// fn then_something_should_be_true(ctx: &Context) {}
+/// fn given_some_state(ctx: &mut Context) -> anyhow::Result<()> { Ok(()) }
+/// fn when_something_happens(ctx: &mut Context) -> anyhow::Result<()> { Ok(()) }
+/// fn then_something_should_be_true(ctx: &Context) -> anyhow::Result<()> { Ok(()) }
 ///
 /// behavior! {
 ///    given_some_state()

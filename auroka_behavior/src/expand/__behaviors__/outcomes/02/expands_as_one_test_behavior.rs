@@ -18,22 +18,30 @@ const EXPECTED: &str = r#"
 #[auroka::test]
 fn compact() -> anyhow::Result<()> {
     let mut context = Context::new();
-    given_there_is_something(&mut context);
-    when_something_happens(&mut context);
+    given_there_is_something(&mut context)?;
+    when_something_happens(&mut context)?;
     let mut _errors_ = Vec::new();
-    if let Err(err) = std::panic::catch_unwind(
-        std::panic::AssertUnwindSafe(|| {
+    let result = std::panic::catch_unwind(
+        std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
             then_something_should_be_true(&context);
+            Ok(())
         }),
-    ) {
-        _errors_.push(err);
+    );
+    match result {
+        Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
+        Err(payload) => _errors_.push(payload),
+        Ok(Ok(())) => {}
     }
-    if let Err(err) = std::panic::catch_unwind(
-        std::panic::AssertUnwindSafe(|| {
+    let result = std::panic::catch_unwind(
+        std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
             then_something_else_should_be_true(&context);
+            Ok(())
         }),
-    ) {
-        _errors_.push(err);
+    );
+    match result {
+        Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
+        Err(payload) => _errors_.push(payload),
+        Ok(Ok(())) => {}
     }
     if !_errors_.is_empty() {
         std::panic::resume_unwind(_errors_.remove(0));

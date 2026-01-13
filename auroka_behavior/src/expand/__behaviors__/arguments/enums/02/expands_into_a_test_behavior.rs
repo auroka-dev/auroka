@@ -14,8 +14,8 @@ const EXPECTED: &str = r#"
 #[auroka::test]
 fn something_is_true() -> anyhow::Result<()> {
     let mut context = Context::new();
-    given_there_is_something(&mut context, Ordering::Equal, Ordering::Equal);
-    when_something_happens(&mut context, Ordering::Equal, Ordering::Equal);
+    given_there_is_something(&mut context, Ordering::Equal, Ordering::Equal)?;
+    when_something_happens(&mut context, Ordering::Equal, Ordering::Equal)?;
     then_something_should_be_true(&context, Ordering::Equal, Ordering::Equal);
     Ok(())
 }

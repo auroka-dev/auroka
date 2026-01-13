@@ -15,10 +15,11 @@ behavior! {
 "#;
 
 #[test]
-pub fn returns_not_found_error_behavior() {
+pub fn returns_not_found_error_behavior() -> anyhow::Result<()> {
   let mut context = Context::new();
-  given_there_is_a_macro_invocation(&mut context, INPUT);
-  when_the_macro_is_expanded(&mut context);
-  then_the_standard_error_should_have(&context, "error[E0425]: cannot find value `boo` in this scope");
-  then_the_standard_error_should_have(&context, "error[E0425]: cannot find value `cool` in this scope");
+  given_there_is_a_macro_invocation(&mut context, INPUT)?;
+  when_the_macro_is_expanded(&mut context)?;
+  then_the_standard_error_should_have(&context, "error[E0425]: cannot find value `boo` in this scope")?;
+  then_the_standard_error_should_have(&context, "error[E0425]: cannot find value `cool` in this scope")?;
+  Ok(())
 }
