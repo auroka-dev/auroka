@@ -1,4 +1,4 @@
-use super::{parse_outcome::parse_outcome, parse_setup_step::parse_setup_step};
+use super::{parse_outcome, parse_setup_step};
 use crate::Outcome;
 use syn::{
   ExprCall, LitStr, Result,

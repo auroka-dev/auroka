@@ -1,4 +1,4 @@
-use super::generate_check::generate_check;
+use super::generate_check;
 use crate::Outcome;
 use quote::quote;
 use syn::{Ident, Stmt};

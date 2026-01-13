@@ -1,4 +1,4 @@
-use super::process_statement::process_statement;
+use super::process_statement;
 use crate::Outcome;
 
 pub(crate) fn process_outcomes(is_async: bool, outcomes: &mut [Outcome]) {
