@@ -3,7 +3,11 @@ use quote::quote;
 use syn::ItemFn;
 
 pub(crate) fn expand(item: proc_macro2::TokenStream) -> proc_macro2::TokenStream {
-  let input_fn = syn::parse2::<ItemFn>(item).unwrap();
+  let input_fn = match syn::parse2::<ItemFn>(item) {
+    Ok(f) => f,
+    Err(e) => return e.to_compile_error(),
+  };
+
   let fn_name = &input_fn.sig.ident;
   let fn_body = &input_fn.block;
   let fn_vis = &input_fn.vis;
