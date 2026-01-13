@@ -1,3 +1,4 @@
+use super::generate_check::generate_check;
 use crate::Outcome;
 use quote::quote;
 use syn::{Ident, Stmt};
@@ -6,22 +7,7 @@ pub(crate) fn generate_multi_test(is_async: bool, fn_name: &Ident, setup_stmts: 
   let async_token = if is_async { quote!(async) } else { quote!() };
   let return_type = quote!(-> anyhow::Result<()>);
 
-  let mut checks = Vec::new();
-
-  for outcome in outcomes {
-    let block = &outcome.block();
-    let stmts = &block.stmts;
-    // We wrap the block content in a closure for AssertUnwindSafe
-    checks.push(quote! {
-        if let Err(err) = std::panic::catch_unwind(
-            std::panic::AssertUnwindSafe(|| {
-                #( #stmts )*
-            }),
-        ) {
-            _errors_.push(err);
-        }
-    });
-  }
+  let checks: Vec<_> = outcomes.iter().map(generate_check).collect();
 
   quote! {
       #[auroka::test]

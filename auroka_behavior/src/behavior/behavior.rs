@@ -1,6 +1,7 @@
+use super::{parse_outcome::parse_outcome, parse_setup_step::parse_setup_step};
 use crate::Outcome;
 use syn::{
-  Block, Expr, ExprCall, LitStr, Result,
+  ExprCall, LitStr, Result,
   parse::{Parse, ParseStream},
 };
 
@@ -48,19 +49,9 @@ impl Parse for Behavior {
 
     while !input.is_empty() {
       if input.peek(LitStr) {
-        // Parse a test case: "Name" { ... }
-        let name: LitStr = input.parse()?;
-        let block: Block = input.parse()?;
-        behavior.outcomes_mut().push(Outcome::new(name, block));
+        behavior.outcomes_mut().push(parse_outcome(input)?);
       } else {
-        // Parse a setup step: function_call()
-        // We parse it as an expression first to handle the call syntax
-        let expr: Expr = input.parse()?;
-        if let Expr::Call(call) = expr {
-          behavior.setup_steps_mut().push(call);
-        } else {
-          return Err(syn::Error::new_spanned(expr, "Expected a function call for setup step"));
-        }
+        behavior.setup_steps_mut().push(parse_setup_step(input)?);
       }
     }
 

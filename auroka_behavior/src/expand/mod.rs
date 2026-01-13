@@ -1,4 +1,5 @@
 mod expand;
+mod generate_check;
 mod generate_function_name;
 mod generate_multi_test;
 mod generate_single_test;
