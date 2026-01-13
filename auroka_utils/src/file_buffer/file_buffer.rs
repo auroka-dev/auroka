@@ -6,10 +6,7 @@ pub struct FileBuffer {
 
 impl FileBuffer {
   pub fn new<T: Into<String>, U: Into<String>>(name: T, content: U) -> Self {
-    FileBuffer {
-      name: name.into(),
-      content: content.into(),
-    }
+    FileBuffer { name: name.into(), content: content.into() }
   }
 
   pub fn name(&self) -> &str {
