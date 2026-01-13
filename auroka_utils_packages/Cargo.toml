@@ -8,4 +8,5 @@ auroka_utils.workspace = true
 auroka_utils_filesystem.workspace = true
 
 [dev-dependencies]
+anyhow.workspace = true
 rand.workspace = true

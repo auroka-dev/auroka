@@ -1,7 +1,7 @@
 use super::super::Context;
 use crate::Environment;
 
-pub fn when_expand_is_invoked(context: &mut Context) {
+pub fn when_expand_is_invoked(context: &mut Context) -> anyhow::Result<()> {
   let error;
   let output;
   let result;
@@ -17,4 +17,5 @@ pub fn when_expand_is_invoked(context: &mut Context) {
 
   context.error_set(error);
   context.output_set(output);
+  Ok(())
 }

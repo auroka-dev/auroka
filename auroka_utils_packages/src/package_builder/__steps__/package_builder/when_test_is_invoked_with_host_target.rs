@@ -1,7 +1,7 @@
 use super::super::Context;
 use auroka_utils::Host;
 
-pub fn when_test_is_invoked_with_host_target(context: &mut Context) {
+pub fn when_test_is_invoked_with_host_target(context: &mut Context) -> anyhow::Result<()> {
   let error;
   let output;
   let result;
@@ -17,4 +17,5 @@ pub fn when_test_is_invoked_with_host_target(context: &mut Context) {
 
   context.error_set(error);
   context.output_set(output);
+  Ok(())
 }

@@ -1,11 +1,11 @@
+use super::super::Context;
 use std::assert_matches::assert_matches;
 
-use super::super::Context;
-
-pub fn then_the_standard_error_should_not_have(context: &Context, content: &str) {
+pub fn then_the_standard_error_should_not_have(context: &Context, content: &str) -> anyhow::Result<()> {
   assert_matches!(context.error(), Some(_), "Expected Standard Error to be Some(_) but got {:?}", context.error());
 
   let obtained = context.error().clone().unwrap();
 
   assert!(!obtained.contains(content), "Expected Standard Error to not contain '{}' but its {}", content, obtained);
+  Ok(())
 }
