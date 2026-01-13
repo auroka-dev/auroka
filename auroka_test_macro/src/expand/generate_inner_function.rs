@@ -1,7 +1,12 @@
 use quote::quote;
-use syn::{Block, Ident, ReturnType, Visibility};
+use syn::{Ident, ItemFn};
 
-pub(crate) fn generate_inner_function(is_async: bool, fn_vis: &Visibility, inner_fn_name: &Ident, fn_ret: &ReturnType, fn_body: &Block) -> proc_macro2::TokenStream {
+pub(crate) fn generate_inner_function(fn_item: &ItemFn, inner_fn_name: &Ident) -> proc_macro2::TokenStream {
+  let is_async = fn_item.sig.asyncness.is_some();
+  let fn_vis = &fn_item.vis;
+  let fn_ret = &fn_item.sig.output;
+  let fn_body = &fn_item.block;
+
   if is_async {
     quote! {
       #fn_vis async fn #inner_fn_name() #fn_ret #fn_body

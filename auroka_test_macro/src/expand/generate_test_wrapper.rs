@@ -1,7 +1,12 @@
 use quote::quote;
-use syn::{Ident, ReturnType, Visibility};
+use syn::{Ident, ItemFn};
 
-pub(crate) fn generate_test_wrapper(is_async: bool, fn_vis: &Visibility, fn_name: &Ident, fn_ret: &ReturnType, inner_fn_name: &Ident) -> proc_macro2::TokenStream {
+pub(crate) fn generate_test_wrapper(fn_item: &ItemFn, inner_fn_name: &Ident) -> proc_macro2::TokenStream {
+  let is_async = fn_item.sig.asyncness.is_some();
+  let fn_vis = &fn_item.vis;
+  let fn_name = &fn_item.sig.ident;
+  let fn_ret = &fn_item.sig.output;
+
   if is_async {
     quote! {
       #[cfg(not(target_arch = "wasm32"))]
