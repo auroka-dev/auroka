@@ -1,8 +1,4 @@
-use crate::__steps__::Context;
-use crate::__steps__::given_there_is_a_macro_invocation;
-use crate::__steps__::then_the_macro_expansion_should_have;
-use crate::__steps__::then_the_standard_error_should_not_have;
-use crate::__steps__::when_the_macro_is_expanded;
+use super::super::super::super::super::__steps__::{Context, given_there_is_a_macro_invocation, then_the_macro_expansion_should_have, then_the_standard_error_should_not_have, when_the_macro_is_expanded};
 
 #[test]
 pub fn expands_worker_test_behavior() {
@@ -28,7 +24,8 @@ behavior! {
   then_the_macro_expansion_should_have(
     &context,
     r#"
-fn something_is_true_inner() -> anyhow::Result<()> {
+#[auroka::test]
+fn something_is_true() -> anyhow::Result<()> {
     let mut context = Context::new();
     given_there_is_something(&mut context, Ordering::Equal);
     when_something_happens(&mut context, Ordering::Equal);

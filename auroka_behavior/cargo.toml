@@ -7,6 +7,7 @@ edition = "2024"
 proc-macro = true
 
 [dependencies]
+proc-macro-crate.workspace = true
 proc-macro2.workspace = true
 quote.workspace = true
 syn.workspace = true
@@ -15,4 +16,6 @@ syn.workspace = true
 auroka_assertions.workspace = true
 auroka_utils.workspace = true
 auroka_utils_packages.workspace = true
+prettyplease.workspace = true
 rand.workspace = true
+

@@ -11,13 +11,13 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
     .map(char::from)
     .collect();
 
-  let mut package = Package::new("test");
+  let folder = format!("macro_auroka_test_tests_{}", suffix);
 
-  package.add_dependency(Dependency::from_member("auroka_behavior", "auroka_behavior"));
+  let mut package = Package::new("test");
   package.add_dependency(Dependency::from_member("auroka", "auroka"));
 
   let invocation = format!(
-    r#"use auroka_behavior::behavior;
+    r#"use auroka::behavior;
 
 {}
 "#,
@@ -30,7 +30,7 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
     package.add_file(FileBuffer::new(format!("src/__data__/{}", file_name), content.clone()));
   });
 
-  let mut package_builder = PackageBuilder::try_new(&format!("macro_auroka_behavior_tests_{}", suffix), package).unwrap();
+  let mut package_builder = PackageBuilder::try_new(&folder, package).unwrap();
 
   package_builder
     .expand_test_target(Environment::Default, &Host::host())

@@ -1,8 +1,4 @@
-use crate::__steps__::Context;
-use crate::__steps__::given_there_is_a_macro_invocation;
-use crate::__steps__::then_the_macro_expansion_should_have;
-use crate::__steps__::then_the_standard_error_should_not_have;
-use crate::__steps__::when_the_macro_is_expanded;
+use super::super::super::super::super::__steps__::{Context, given_there_is_a_macro_invocation, then_the_macro_expansion_should_have, then_the_standard_error_should_not_have, when_the_macro_is_expanded};
 
 #[test]
 pub fn expands_worker_test_behavior() {
@@ -12,8 +8,8 @@ pub fn expands_worker_test_behavior() {
     &mut context,
     r#"
 behavior! { :async
-  given_there_is_something(Ordering::Equal)
-  when_something_happens("HI")
+  given_there_is_something()
+  when_something_happens()
 
   "Something is true" {
     then_something_should_be_true()
@@ -29,10 +25,11 @@ behavior! { :async
   then_the_macro_expansion_should_have(
     &context,
     r#"
-async fn something_is_true_inner() -> anyhow::Result<()> {
+#[auroka::test]
+async fn something_is_true() -> anyhow::Result<()> {
     let mut context = Context::new();
-    given_there_is_something(&mut context, Ordering::Equal).await?;
-    when_something_happens(&mut context, "HI").await?;
+    given_there_is_something(&mut context).await?;
+    when_something_happens(&mut context).await?;
     then_something_should_be_true(&context).await?;
     Ok(())
 }
