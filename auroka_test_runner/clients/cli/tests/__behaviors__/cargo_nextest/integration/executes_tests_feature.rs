@@ -1,9 +1,10 @@
-use super::super::super::super::__steps__::cargo_nextest::Context;
-use super::super::super::super::__steps__::package::given_there_is_a_package_with_100_successful_tests;
-use super::super::super::super::__steps__::standard_error::then_the_standard_error_should_have;
-use super::super::super::super::__steps__::standard_error::then_the_standard_error_should_not_have;
-use super::super::super::super::__steps__::success::then_success_should_have_been_returned;
-use crate::__steps__::when_cargo_nextest_is_invoked_over_the_package;
+use super::super::super::super::__steps__::{
+  cargo_nextest::Context,
+  package::given_there_is_a_package_with_100_successful_tests,
+  standard_error::{then_the_standard_error_should_have, then_the_standard_error_should_not_have},
+  success::then_success_should_have_been_returned,
+  when_cargo_nextest_is_invoked_over_the_package,
+};
 use workers_behavior::behavior;
 
 behavior! {

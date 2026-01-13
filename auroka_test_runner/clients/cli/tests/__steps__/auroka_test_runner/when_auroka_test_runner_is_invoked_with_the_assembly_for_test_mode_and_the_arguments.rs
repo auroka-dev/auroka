@@ -5,7 +5,7 @@ pub fn when_auroka_test_runner_is_invoked_with_the_assembly_for_test_mode_and_th
     context: &mut Context,
     mode: TestMode,
     arguments: &str,
-) {
+) -> anyhow::Result<()> {
     let mut command = auroka_test_runner_command(mode);
 
     if arguments.starts_with("--list") && arguments.contains("--ignored") {
@@ -17,4 +17,5 @@ pub fn when_auroka_test_runner_is_invoked_with_the_assembly_for_test_mode_and_th
     command.args(arguments.split_whitespace());
 
     context.output_set(command.output());
+    Ok(())
 }

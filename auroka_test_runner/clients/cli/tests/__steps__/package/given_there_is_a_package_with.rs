@@ -1,7 +1,7 @@
 use super::{prepare_tests, PackageBuilder};
 use crate::__steps__::cargo_nextest::Context;
 
-pub fn given_there_is_a_package_with(context: &mut Context, content: &str) {
+pub fn given_there_is_a_package_with(context: &mut Context, content: &str) -> anyhow::Result<()> {
     let mut builder = PackageBuilder::new("package");
 
     let path = builder
@@ -11,4 +11,5 @@ pub fn given_there_is_a_package_with(context: &mut Context, content: &str) {
     context.package_builder_set(builder);
 
     context.path_set(path);
+    Ok(())
 }

@@ -11,7 +11,7 @@ lazy_static! {
     static ref ASSEMBLY_CACHE: Mutex<HashMap<String, PathBuf>> = Mutex::new(HashMap::new());
 }
 
-pub fn given_there_is_an_assembly_with(context: &mut Context, content: &str) {
+pub fn given_there_is_an_assembly_with(context: &mut Context, content: &str) -> anyhow::Result<()> {
     let mut cache = ASSEMBLY_CACHE.lock().unwrap();
 
     let assembly_path = cache
@@ -24,4 +24,5 @@ pub fn given_there_is_an_assembly_with(context: &mut Context, content: &str) {
         .clone();
 
     context.sandbox_set(Sandbox::new(assembly_path));
+    Ok(())
 }

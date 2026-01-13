@@ -5,7 +5,7 @@ use crate::__steps__::{
 pub fn when_auroka_test_runner_is_invoked_with_the_assembly_and_the_arguments(
     context: &mut Context,
     arguments: &str,
-) {
+) -> anyhow::Result<()> {
     let mut command = auroka_test_runner_command(TestMode::Default);
 
     if arguments.starts_with("--list") && arguments.contains("--ignored") {
@@ -17,4 +17,5 @@ pub fn when_auroka_test_runner_is_invoked_with_the_assembly_and_the_arguments(
     command.args(arguments.split_whitespace());
 
     context.output_set(command.output());
+    Ok(())
 }

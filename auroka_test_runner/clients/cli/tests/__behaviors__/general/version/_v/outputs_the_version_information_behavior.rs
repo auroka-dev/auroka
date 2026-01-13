@@ -1,7 +1,6 @@
-use super::super::super::super::super::__steps__::Context;
-use super::super::super::super::super::__steps__::auroka_test_runner::when_auroka_test_runner_is_invoked_with_the_option;
-use super::super::super::super::super::__steps__::standard_output::then_the_standard_output_should_have;
-use super::super::super::super::super::__steps__::success::then_success_should_have_been_returned;
+use super::super::super::super::super::__steps__::{
+  Context, auroka_test_runner::when_auroka_test_runner_is_invoked_with_the_option, standard_output::then_the_standard_output_should_have, success::then_success_should_have_been_returned,
+};
 use auroka_behavior::behavior;
 
 behavior! {
