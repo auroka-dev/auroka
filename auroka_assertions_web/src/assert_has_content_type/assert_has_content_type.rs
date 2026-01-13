@@ -11,11 +11,7 @@ pub async fn assert_has_content_type_internal(url: &str, expected: &str) -> Resu
     .unwrap_or("");
 
   if !content_type.contains(expected) {
-    anyhow::bail!(
-      "Content-Type mismatch. Expected to contain: '{}', Actual: '{}'",
-      expected,
-      content_type
-    );
+    anyhow::bail!("Content-Type mismatch. Expected to contain: '{}', Actual: '{}'", expected, content_type);
   }
   Ok(())
 }

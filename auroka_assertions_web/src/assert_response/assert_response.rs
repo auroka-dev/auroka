@@ -1,21 +1,12 @@
 use anyhow::{Context, Result};
 
 #[doc(hidden)]
-pub async fn assert_response_internal(
-  url: &str,
-  expected_status: u16,
-  expected_content_type: &str,
-  expected_body: &str,
-) -> Result<()> {
+pub async fn assert_response_internal(url: &str, expected_status: u16, expected_content_type: &str, expected_body: &str) -> Result<()> {
   let response = reqwest::get(url).await.context("Failed to fetch URL")?;
 
   let status = response.status().as_u16();
   if status != expected_status {
-    anyhow::bail!(
-      "Status mismatch. Expected: {}, Actual: {}",
-      expected_status,
-      status
-    );
+    anyhow::bail!("Status mismatch. Expected: {}, Actual: {}", expected_status, status);
   }
 
   let content_type = response
@@ -25,11 +16,7 @@ pub async fn assert_response_internal(
     .unwrap_or("");
 
   if !content_type.contains(expected_content_type) {
-    anyhow::bail!(
-      "Content-Type mismatch. Expected to contain: '{}', Actual: '{}'",
-      expected_content_type,
-      content_type
-    );
+    anyhow::bail!("Content-Type mismatch. Expected to contain: '{}', Actual: '{}'", expected_content_type, content_type);
   }
 
   let body = response
@@ -37,11 +24,7 @@ pub async fn assert_response_internal(
     .await
     .context("Failed to get response text")?;
   if body != expected_body {
-    anyhow::bail!(
-      "Content mismatch. Expected:\n{}\n\nActual:\n{}",
-      expected_body,
-      body
-    );
+    anyhow::bail!("Content mismatch. Expected:\n{}\n\nActual:\n{}", expected_body, body);
   }
 
   Ok(())
