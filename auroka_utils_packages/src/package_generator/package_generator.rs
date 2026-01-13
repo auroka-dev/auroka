@@ -41,7 +41,18 @@ edition = '2021'
           }
         }
         Dependency::Member(member) => {
-          content.push_str(&format!("{} = {{ path='{}/' }}\n", member.name(), Workspace::root_dir().join(member.member())));
+          let mut options = Vec::new();
+          options.push(format!("path='{}/'", Workspace::root_dir().join(member.member())));
+
+          if !member.features().is_empty() {
+            options.push(format!("features={:?}", member.features()));
+          }
+
+          if !member.default_features() {
+            options.push("default-features=false".to_string());
+          }
+
+          content.push_str(&format!("{} = {{ {} }}\n", member.name(), options.join(", ")));
         }
       }
     }
