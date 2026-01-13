@@ -1,1 +1,5 @@
+fn_params_layout = "Compressed"
+max_width = 230
 tab_spaces = 2
+use_small_heuristics = "Max"
+chain_width = 60
