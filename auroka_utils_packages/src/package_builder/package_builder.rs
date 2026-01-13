@@ -16,13 +16,7 @@ impl PackageBuilder {
   pub fn try_new(folder: &str, package: Package) -> Result<Self, std::io::Error> {
     let root = Workspace::target_dir().join(folder).join(package.name());
     root.reset()?;
-    Ok(PackageBuilder {
-      error: None,
-      generated: false,
-      output: None,
-      root,
-      package,
-    })
+    Ok(PackageBuilder { error: None, generated: false, output: None, root, package })
   }
 
   pub fn build(&mut self) -> Result<(), std::io::Error> {
@@ -64,11 +58,7 @@ impl PackageBuilder {
     Ok(())
   }
 
-  pub fn expand_target(
-    &mut self,
-    environment: Environment,
-    target: &str,
-  ) -> Result<(), std::io::Error> {
+  pub fn expand_target(&mut self, environment: Environment, target: &str) -> Result<(), std::io::Error> {
     self.generate()?;
 
     let output = self
@@ -101,11 +91,7 @@ impl PackageBuilder {
     Ok(())
   }
 
-  pub fn expand_test_target(
-    &mut self,
-    environment: Environment,
-    target: &str,
-  ) -> Result<(), std::io::Error> {
+  pub fn expand_test_target(&mut self, environment: Environment, target: &str) -> Result<(), std::io::Error> {
     self.generate()?;
 
     let output = self
@@ -123,11 +109,7 @@ impl PackageBuilder {
     Ok(())
   }
 
-  pub fn execute_test_target(
-    &mut self,
-    environment: Environment,
-    target: &str,
-  ) -> Result<(), std::io::Error> {
+  pub fn execute_test_target(&mut self, environment: Environment, target: &str) -> Result<(), std::io::Error> {
     self.generate()?;
 
     let output = self

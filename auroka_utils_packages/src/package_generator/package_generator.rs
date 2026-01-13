@@ -37,20 +37,11 @@ edition = '2021'
           if registry.features().is_empty() {
             content.push_str(&format!("{} = '{}'\n", registry.name(), registry.version()));
           } else {
-            content.push_str(&format!(
-              "{} = {{ version = '{}', features = {:?} }}\n",
-              registry.name(),
-              registry.version(),
-              registry.features()
-            ));
+            content.push_str(&format!("{} = {{ version = '{}', features = {:?} }}\n", registry.name(), registry.version(), registry.features()));
           }
         }
         Dependency::Member(member) => {
-          content.push_str(&format!(
-            "{} = {{ path='{}/' }}\n",
-            member.name(),
-            Workspace::root_dir().join(member.member())
-          ));
+          content.push_str(&format!("{} = {{ path='{}/' }}\n", member.name(), Workspace::root_dir().join(member.member())));
         }
       }
     }

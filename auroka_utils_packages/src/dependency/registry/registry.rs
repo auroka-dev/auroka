@@ -7,11 +7,7 @@ pub struct Registry {
 
 impl Registry {
   pub fn new(name: &str, version: &str, features: &[&str]) -> Self {
-    Registry {
-      name: name.to_string(),
-      version: version.to_string(),
-      features: features.iter().map(|feature| feature.to_string()).collect(),
-    }
+    Registry { name: name.to_string(), version: version.to_string(), features: features.iter().map(|feature| feature.to_string()).collect() }
   }
 
   pub fn name(&self) -> &str {

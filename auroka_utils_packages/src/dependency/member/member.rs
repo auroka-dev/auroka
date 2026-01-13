@@ -6,10 +6,7 @@ pub struct Member {
 
 impl Member {
   pub fn new(name: &str, member: &str) -> Self {
-    Member {
-      name: name.to_string(),
-      member: member.to_string(),
-    }
+    Member { name: name.to_string(), member: member.to_string() }
   }
 
   pub fn name(&self) -> &str {

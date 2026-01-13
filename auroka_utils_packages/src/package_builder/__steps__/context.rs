@@ -9,12 +9,7 @@ pub struct Context {
 
 impl Context {
   pub fn new() -> Self {
-    Context {
-      error: None,
-      output: None,
-      package_builder: None,
-      result: None,
-    }
+    Context { error: None, output: None, package_builder: None, result: None }
   }
 
   pub fn error(&self) -> &Option<String> {

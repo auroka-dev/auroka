@@ -16,15 +16,9 @@ pub fn given_there_is_a_package_builder(context: &mut Context) {
   let mut package = Package::new("test");
   package.add_file(FileBuffer::new("src/lib.rs", "pub fn main() {}"));
 
-  let package_builder =
-    PackageBuilder::try_new(&format!("package_builder_tests_{}", suffix), package);
+  let package_builder = PackageBuilder::try_new(&format!("package_builder_tests_{}", suffix), package);
 
-  assert_matches!(
-    package_builder,
-    Ok(_),
-    "Expected Ok(_) but got {:?}",
-    package_builder
-  );
+  assert_matches!(package_builder, Ok(_), "Expected Ok(_) but got {:?}", package_builder);
 
   context.package_builder_set(package_builder.unwrap());
 }

@@ -10,11 +10,7 @@ pub struct Package {
 
 impl Package {
   pub fn new(name: &str) -> Self {
-    Package {
-      name: name.to_string(),
-      dependencies: Vec::new(),
-      files: Vec::new(),
-    }
+    Package { name: name.to_string(), dependencies: Vec::new(), files: Vec::new() }
   }
 
   pub fn name(&self) -> &str {
