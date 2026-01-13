@@ -19,4 +19,6 @@ pub(crate) use process_statement::process_statement;
 #[cfg(test)]
 mod __behaviors__;
 #[cfg(test)]
+mod __helpers__;
+#[cfg(test)]
 mod __steps__;

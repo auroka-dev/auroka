@@ -1,4 +1,5 @@
 use super::Context;
+use crate::expand::__helpers__::format_expansion_result;
 
 pub fn when_the_macro_is_expanded(context: &mut Context) {
   let invocation_str = context
@@ -13,25 +14,9 @@ pub fn when_the_macro_is_expanded(context: &mut Context) {
   let input_tokens = macro_call.tokens;
 
   // Call the internal expansion logic
-  match crate::expand(input_tokens) {
-    Ok(expanded_tokens) => {
-      // Output tokens are a function definition (#[test] fn ...).
-      // Format it nicely.
-      // We parse as syn::File (which allows multiple items) to handle potential extra items or just the function.
-      match syn::parse2::<syn::File>(expanded_tokens) {
-        Ok(file) => {
-          let formatted = prettyplease::unparse(&file);
-          context.expansion_set(Some(formatted));
-        }
-        Err(e) => {
-          // For now, if we can't parse as File, try to just to_string it for debugging
-          context.error_set(Some(format!("Failed to parse output tokens: {}", e)));
-        }
-      }
-    }
-    Err(e) => {
-      // This is a syn::Error from the macro expansion logic
-      context.error_set(Some(e.to_string()));
-    }
-  }
+  let result = crate::expand(input_tokens);
+  let (expansion, error) = format_expansion_result(result);
+
+  context.expansion_set(expansion);
+  context.error_set(error);
 }
