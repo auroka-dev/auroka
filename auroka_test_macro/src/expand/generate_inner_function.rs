@@ -8,12 +8,12 @@ pub(crate) fn generate_inner_function(fn_item: &ItemFn, inner_fn_name: &Ident) -
   let fn_body = &fn_item.block;
 
   if is_async {
-    quote! {
+    return quote! {
       #fn_vis async fn #inner_fn_name() #fn_ret #fn_body
-    }
-  } else {
-    quote! {
-      #fn_vis fn #inner_fn_name() #fn_ret #fn_body
-    }
+    };
+  }
+
+  quote! {
+    #fn_vis fn #inner_fn_name() #fn_ret #fn_body
   }
 }

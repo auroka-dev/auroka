@@ -5,7 +5,7 @@ pub(crate) fn generate_test_wrapper(fn_item: &ItemFn, inner_fn_name: &Ident) -> 
   let (vis, name, ret) = (&fn_item.vis, &fn_item.sig.ident, &fn_item.sig.output);
 
   if fn_item.sig.asyncness.is_some() {
-    quote! {
+    return quote! {
       #[cfg(not(target_arch = "wasm32"))]
       #[test]
       #vis fn #name() #ret {
@@ -15,14 +15,14 @@ pub(crate) fn generate_test_wrapper(fn_item: &ItemFn, inner_fn_name: &Ident) -> 
               .unwrap()
               .block_on(#inner_fn_name())
       }
-    }
-  } else {
-    quote! {
-      #[cfg(not(target_arch = "wasm32"))]
-      #[test]
-      #vis fn #name() #ret {
-          #inner_fn_name()
-      }
+    };
+  }
+
+  quote! {
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    #vis fn #name() #ret {
+        #inner_fn_name()
     }
   }
 }
