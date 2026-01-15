@@ -14,11 +14,11 @@ behavior! { :async
 const EXPECTED: &str = r#"
 #[::auroka::test]
 async fn something_is_true() -> anyhow::Result<()> {
-    let mut context = Context::new();
-    given_there_is_something(&mut context).await?;
-    when_something_happens(&mut context).await?;
-    then_something_should_be_true(&context).await?;
-    Ok(())
+  let mut context = Context::new();
+  given_there_is_something(&mut context).await?;
+  when_something_happens(&mut context).await?;
+  then_something_should_be_true(&context).await?;
+  Ok(())
 }
 "#;
 

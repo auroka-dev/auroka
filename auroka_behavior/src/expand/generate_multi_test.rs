@@ -7,22 +7,25 @@ pub(crate) fn generate_multi_test(behavior: &crate::Behavior, fn_name: &Ident, s
   let async_token = if behavior.is_async() { quote!(async) } else { quote!() };
   let return_type = quote!(-> anyhow::Result<()>);
 
-  let checks: Vec<_> = outcomes.iter().map(generate_check).collect();
+  let checks: Vec<_> = outcomes
+    .iter()
+    .map(|outcome| generate_check(outcome, behavior.is_async()))
+    .collect();
 
   quote! {
-      #[::auroka::test]
-      #async_token fn #fn_name() #return_type {
-          let mut context = Context::new();
-          #( #setup_stmts )*
-          let mut _errors_ = Vec::new();
+    #[::auroka::test]
+    #async_token fn #fn_name() #return_type {
+      let mut context = Context::new();
+      #( #setup_stmts )*
+      let mut _errors_ = Vec::new();
 
-          #( #checks )*
+      #( #checks )*
 
-          if !_errors_.is_empty() {
-            std::panic::resume_unwind(_errors_.remove(0));
-          }
-
-          Ok(())
+      if !_errors_.is_empty() {
+        std::panic::resume_unwind(_errors_.remove(0));
       }
+
+      Ok(())
+    }
   }
 }

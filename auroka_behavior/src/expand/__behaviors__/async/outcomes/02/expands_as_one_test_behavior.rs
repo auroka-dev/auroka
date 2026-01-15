@@ -17,54 +17,52 @@ behavior! { :async
 const EXPECTED: &str = r#"
 #[::auroka::test]
 async fn compact() -> anyhow::Result<()> {
-    let mut context = Context::new();
-    given_there_is_something(&mut context).await?;
-    when_something_happens(&mut context).await?;
-    let mut _errors_ = Vec::new();
-    let result = std::panic::catch_unwind(
-        std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
-            then_something_should_be_true(&context).await?;
-            Ok(())
-        }),
-    );
-    match result {
-        Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => {
-            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
-                s.to_string()
-            } else if let Some(s) = payload.downcast_ref::<String>() {
-                s.clone()
-            } else {
-                "Unknown panic".to_string()
-            };
-            _errors_.push(Box::new(msg));
-        }
-        Ok(Ok(())) => {}
+  let mut context = Context::new();
+  given_there_is_something(&mut context).await?;
+  when_something_happens(&mut context).await?;
+  let mut _errors_ = Vec::new();
+  let result = futures::FutureExt::catch_unwind(std::panic::AssertUnwindSafe(async {
+    then_something_should_be_true(&context).await?;
+    Ok::<(), anyhow::Error>(())
+  }))
+  .await;
+  match result {
+    Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
+    Err(payload) => {
+      let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+        s.to_string()
+      } else if let Some(s) = payload.downcast_ref::<String>() {
+        s.clone()
+      } else {
+        "Unknown panic".to_string()
+      };
+      _errors_.push(Box::new(msg));
     }
-    let result = std::panic::catch_unwind(
-        std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
-            then_something_else_should_be_true(&context).await?;
-            Ok(())
-        }),
-    );
-    match result {
-        Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => {
-            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
-                s.to_string()
-            } else if let Some(s) = payload.downcast_ref::<String>() {
-                s.clone()
-            } else {
-                "Unknown panic".to_string()
-            };
-            _errors_.push(Box::new(msg));
-        }
-        Ok(Ok(())) => {}
+    Ok(Ok(())) => {}
+  }
+  let result = futures::FutureExt::catch_unwind(std::panic::AssertUnwindSafe(async {
+    then_something_else_should_be_true(&context).await?;
+    Ok::<(), anyhow::Error>(())
+  }))
+  .await;
+  match result {
+    Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
+    Err(payload) => {
+      let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+        s.to_string()
+      } else if let Some(s) = payload.downcast_ref::<String>() {
+        s.clone()
+      } else {
+        "Unknown panic".to_string()
+      };
+      _errors_.push(Box::new(msg));
     }
-    if !_errors_.is_empty() {
-        std::panic::resume_unwind(_errors_.remove(0));
-    }
-    Ok(())
+    Ok(Ok(())) => {}
+  }
+  if !_errors_.is_empty() {
+    std::panic::resume_unwind(_errors_.remove(0));
+  }
+  Ok(())
 }
 "#;
 

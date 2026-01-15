@@ -13,11 +13,11 @@ behavior! { :async
 
 const EXPECTED: &str = r#"
 async fn something_is_true_inner() -> anyhow::Result<()> {
-    let mut context = Context::new();
-    given_there_is_something(&mut context, Ordering::Equal).await?;
-    when_something_happens(&mut context, "HI").await?;
-    then_something_should_be_true(&context).await?;
-    Ok(())
+  let mut context = Context::new();
+  given_there_is_something(&mut context, Ordering::Equal).await?;
+  when_something_happens(&mut context, "HI").await?;
+  then_something_should_be_true(&context).await?;
+  Ok(())
 }
 "#;
 

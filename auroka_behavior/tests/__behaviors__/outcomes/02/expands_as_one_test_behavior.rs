@@ -16,59 +16,56 @@ behavior! {
 
 const EXPECTED: &str = r#"
 fn compact_inner() -> anyhow::Result<()> {
-    let mut context = Context::new();
-    given_there_is_something(&mut context)?;
-    when_something_happens(&mut context)?;
-    let mut _errors_ = Vec::new();
-    let result = std::panic::catch_unwind(
-        std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
-            then_something_should_be_true(&context)?;
-            Ok(())
-        }),
-    );
-    match result {
-        Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => {
-            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
-                s.to_string()
-            } else if let Some(s) = payload.downcast_ref::<String>() {
-                s.clone()
-            } else {
-                "Unknown panic".to_string()
-            };
-            _errors_.push(Box::new(msg));
-        }
-        Ok(Ok(())) => {}
-    }
-    let result = std::panic::catch_unwind(
-        std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
-            then_something_else_should_be_true(&context)?;
-            Ok(())
-        }),
-    );
-    match result {
-        Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
-        Err(payload) => {
-            let msg = if let Some(s) = payload.downcast_ref::<&str>() {
-                s.to_string()
-            } else if let Some(s) = payload.downcast_ref::<String>() {
-                s.clone()
-            } else {
-                "Unknown panic".to_string()
-            };
-            _errors_.push(Box::new(msg));
-        }
-        Ok(Ok(())) => {}
-    }
-    if !_errors_.is_empty() {
-        std::panic::resume_unwind(_errors_.remove(0));
-    }
+  let mut context = Context::new();
+  given_there_is_something(&mut context)?;
+  when_something_happens(&mut context)?;
+  let mut _errors_ = Vec::new();
+  let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
+    then_something_should_be_true(&context)?;
     Ok(())
+  }));
+  match result {
+    Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
+    Err(payload) => {
+      let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+        s.to_string()
+      } else if let Some(s) = payload.downcast_ref::<String>() {
+        s.clone()
+      } else {
+        "Unknown panic".to_string()
+      };
+      _errors_.push(Box::new(msg));
+    }
+    Ok(Ok(())) => {}
+  }
+  let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> anyhow::Result<()> {
+    then_something_else_should_be_true(&context)?;
+    Ok(())
+  }));
+  match result {
+    Ok(Err(e)) => _errors_.push(Box::new(e.to_string())),
+    Err(payload) => {
+      let msg = if let Some(s) = payload.downcast_ref::<&str>() {
+        s.to_string()
+      } else if let Some(s) = payload.downcast_ref::<String>() {
+        s.clone()
+      } else {
+        "Unknown panic".to_string()
+      };
+      _errors_.push(Box::new(msg));
+    }
+    Ok(Ok(())) => {}
+  }
+  if !_errors_.is_empty() {
+    std::panic::resume_unwind(_errors_.remove(0));
+  }
+  Ok(())
 }
 "#;
 
 #[test]
 pub fn expands_as_one_test_behavior() -> anyhow::Result<()> {
+  println!("DEBUG EXPECTED:\n{}", EXPECTED);
   let mut context = Context::new();
   given_there_is_a_macro_invocation(&mut context, INPUT)?;
   when_the_macro_is_expanded(&mut context)?;

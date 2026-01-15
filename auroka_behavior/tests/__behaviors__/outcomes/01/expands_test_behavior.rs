@@ -13,11 +13,11 @@ behavior! {
 
 const EXPECTED: &str = r#"
 fn something_is_true_inner() -> anyhow::Result<()> {
-    let mut context = Context::new();
-    given_there_is_something(&mut context, Ordering::Equal)?;
-    when_something_happens(&mut context, "HI")?;
-    then_something_should_be_true(&context)?;
-    Ok(())
+  let mut context = Context::new();
+  given_there_is_something(&mut context, Ordering::Equal)?;
+  when_something_happens(&mut context, "HI")?;
+  then_something_should_be_true(&context)?;
+  Ok(())
 }
 "#;
 

@@ -20,7 +20,6 @@ auroka_test.workspace = true
 auroka_test_macro.workspace = true
 auroka_utils.workspace = true
 auroka_utils_packages.workspace = true
-prettyplease.workspace = true
 rand.workspace = true
 
 [lints]
