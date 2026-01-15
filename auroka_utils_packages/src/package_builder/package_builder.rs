@@ -104,7 +104,13 @@ impl PackageBuilder {
       .output()?;
 
     self.error = Some(std::str::from_utf8(&output.stderr).unwrap().to_string());
-    self.output = Some(std::str::from_utf8(&output.stdout).unwrap().to_string());
+
+    let raw_output = std::str::from_utf8(&output.stdout).unwrap().to_string();
+
+    // Attempt to format the output with rustfmt to respect project settings (2 spaces)
+    let formatted_output = auroka_utils::format_code(&raw_output);
+
+    self.output = Some(formatted_output);
 
     Ok(())
   }
