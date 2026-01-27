@@ -15,16 +15,18 @@
 use auroka::behavior;
 
 behavior! {
-   given_some_state()
-   when_something_happens()
+  given_there_is_a_paginated_list()
+  when_the_page_changes()
 
-   "The system state should be valid" {
-     then_state_should_be_valid()
-   }
+  // Describes the UI result
+  "The page content updates" {
+     then_the_page_should_change()
+  }
 
-   "The system should respond correctly" {
-     then_response_should_be_ok()
-   }
+  // Describes the invisible system result
+  "The pagination event is tracked" {
+    then_the_pagination_event_should_be_detected()
+  }
 }
 ```
 
